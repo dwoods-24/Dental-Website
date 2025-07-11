@@ -625,7 +625,6 @@
 
         // Form submission
         document.getElementById('appointmentForm').addEventListener('submit', function(e) {
-            e.preventDefault();
             
             // Simulate form submission
             const submitBtn = document.querySelector('.submit-btn');
@@ -645,7 +644,7 @@
                 // Hide success message after 5 seconds
                 setTimeout(() => {
                     successMessage.style.display = 'none';
-                }, 5000);
+                }, 10000);
             }, 2000);
         });
 
