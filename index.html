@@ -158,7 +158,7 @@
                 <div class="col-lg-8">
                     <div class="card border-0 shadow-lg">
                         <div class="card-body p-4">
-                            <form name="appointment-requests" method="post" netlify>
+                            <form name="appointment-requests" method="post" netlify-honeypot="bot-field" data-netlify="true">
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="name" class="form-label fw-bold">Full Name</label>
@@ -177,12 +177,12 @@
                                     <div class="col-md-6 mb-3">
                                         <label for="service" class="form-label fw-bold">Preferred Service</label>
                                         <select class="form-select form-select-lg" id="service" name="service" required>
-                                            <option value="">Select a service</option>
-                                            <option value="essential">Essential Smile Package</option>
-                                            <option value="comfort">Comfort Fit Package</option>
-                                            <option value="premium">Premium Smile Package</option>
-                                            <option value="elite">Elite Comfort Package</option>
-                                            <option value="elite">Other Services</option>
+                                            <option value="N/A">Select a service</option>
+                                            <option value="Essential Smile Package">Essential Smile Package</option>
+                                            <option value="Comfort Fit Package">Comfort Fit Package</option>
+                                            <option value="Premium Smile Package">Premium Smile Package</option>
+                                            <option value="Elite Comfort Package">Elite Comfort Package</option>
+                                            <option value="Other Services">Other Services</option>
                                         </select>
                                     </div>
                                 </div>
@@ -195,14 +195,14 @@
                                         <label for="time" class="form-label fw-bold">Preferred Time</label>
                                         <select class="form-select form-select-lg" id="time" name="time" required>
                                             <option value="">Select a time</option>
-                                            <option value="09:00">9:00 AM</option>
-                                            <option value="10:00">10:00 AM</option>
-                                            <option value="11:00">11:00 AM</option>
-                                            <option value="13:00">1:00 PM</option>
-                                            <option value="14:00">2:00 PM</option>
-                                            <option value="15:00">3:00 PM</option>
-                                            <option value="16:00">4:00 PM</option>
-                                            <option value="17:00">5:00 PM</option>
+                                            <option value="09:00 AM">9:00 AM</option>
+                                            <option value="10:00 AM">10:00 AM</option>
+                                            <option value="11:00 AM">11:00 AM</option>
+                                            <option value="1:00 PM">1:00 PM</option>
+                                            <option value="2:00 PM">2:00 PM</option>
+                                            <option value="3:00 PM">3:00 PM</option>
+                                            <option value="4:00 PM">4:00 PM</option>
+                                            <option value="5:00 PM">5:00 PM</option>
                                         </select>
                                     </div>
                                 </div>
@@ -231,7 +231,7 @@
             <div class="row">
                 <div class="col-lg-3 mb-4 mb-lg-0">
                     <h3 class="h5 text-primary mb-3">Contact Info</h3>
-                    <p><i class="bi bi-geo-alt-fill me-2"></i>3441 Lebanon Pike<br>Hermitage, TN 37076</p>
+                    <p><i class="bi bi-geo-alt-fill me-2"></i>3441 Lebanon Pike Suite 105<br>Hermitage, TN 37076</p>
                     <p><i class="bi bi-telephone-fill me-2"></i>615-719-7883</p>
                     <p><i class="bi bi-envelope-fill me-2"></i>denturesandmore1@yahoo.com</p>
                 </div>

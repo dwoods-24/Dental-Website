@@ -254,8 +254,8 @@ body {
     height: 350px;
     width: 420px;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: right;
+    justify-content: right;
 }
 
 /* Form Styles */
