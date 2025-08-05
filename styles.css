@@ -125,6 +125,90 @@ body {
     box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
 }
 
+/* Square Booking Integration Styles */
+
+/* Booking container styling */
+#square-booking-container {
+    min-height: 500px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+/* Loading message styling */
+.loading-message {
+    padding: 60px 20px;
+}
+
+.loading-message .spinner-border {
+    width: 3rem;
+    height: 3rem;
+    border-width: 0.3em;
+}
+
+/* Square widget iframe styling (when it loads) */
+#square-booking-container iframe {
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100% !important;
+    min-height: 600px;
+}
+
+/* Alternative contact section styling */
+.appointment-section .border-top {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.appointment-section h5 {
+    font-weight: 600;
+}
+
+.appointment-section .bi {
+    font-size: 1.2rem;
+}
+
+/* Responsive adjustments for booking widget */
+@media (max-width: 768px) {
+    #square-booking-container {
+        padding: 15px;
+        min-height: 450px;
+    }
+    
+    #square-booking-container iframe {
+        min-height: 500px;
+    }
+    
+    .loading-message {
+        padding: 40px 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    #square-booking-container {
+        padding: 10px;
+        min-height: 400px;
+    }
+    
+    #square-booking-container iframe {
+        min-height: 450px;
+    }
+}
+
+/* Enhance the appointment section background */
+#appointment {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+}
+
+/* Style the card containing the booking widget */
+#appointment .card {
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+#appointment .card-body {
+    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+}
+
 
 /* Animations */
 @keyframes fadeInUp {

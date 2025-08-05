@@ -290,6 +290,243 @@ function showServiceDetails(service) {
     }
 }
 
+// Updated JavaScript for Square Booking Integration
+
+// DOM Content Loaded Event
+document.addEventListener('DOMContentLoaded', function() {
+    initializeApp();
+    initializeSquareBooking();
+});
+
+// Initialize Square Booking Widget
+function initializeSquareBooking() {
+    // Wait for Square script to load
+    const checkSquareLoaded = setInterval(() => {
+        if (window.Square && window.Square.appointments) {
+            clearInterval(checkSquareLoaded);
+            setupSquareWidget();
+        }
+    }, 500);
+    
+    // Timeout after 10 seconds if Square doesn't load
+    setTimeout(() => {
+        clearInterval(checkSquareLoaded);
+        handleSquareLoadError();
+    }, 10000);
+}
+
+// Setup Square booking widget
+function setupSquareWidget() {
+    try {
+        const loadingMessage = document.querySelector('.loading-message');
+        if (loadingMessage) {
+            // Hide loading message once Square is ready
+            setTimeout(() => {
+                loadingMessage.style.display = 'none';
+            }, 2000);
+        }
+        
+        console.log('Square booking widget loaded successfully');
+        
+        // Add any additional Square widget customization here if needed
+        // Example: Listen for booking completion events
+        if (window.Square.appointments.embed) {
+            // You can add event listeners here for booking completion
+            // window.Square.appointments.embed.on('booking_complete', handleBookingComplete);
+        }
+        
+    } catch (error) {
+        console.error('Error setting up Square widget:', error);
+        handleSquareLoadError();
+    }
+}
+
+// Handle Square loading errors
+function handleSquareLoadError() {
+    const loadingMessage = document.querySelector('.loading-message');
+    if (loadingMessage) {
+        loadingMessage.innerHTML = `
+            <div class="alert alert-warning" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <strong>Booking System Temporarily Unavailable</strong><br>
+                Please call us directly at <strong>615-719-7883</strong> or email <strong>denturesandmore1@yahoo.com</strong> to schedule your appointment.
+            </div>
+        `;
+    }
+}
+
+// Optional: Handle booking completion (if Square provides this event)
+function handleBookingComplete(bookingData) {
+    // Show success message
+    const successMessage = document.createElement('div');
+    successMessage.className = 'alert alert-success mt-3 fade show';
+    successMessage.innerHTML = `
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <strong>Appointment Booked Successfully!</strong><br>
+        You should receive a confirmation email shortly. We look forward to seeing you!
+    `;
+    
+    const container = document.getElementById('square-booking-container');
+    if (container) {
+        container.appendChild(successMessage);
+        
+        // Remove success message after 10 seconds
+        setTimeout(() => {
+            successMessage.remove();
+        }, 10000);
+    }
+}
+
+// Validate name and redirect to Square booking
+function validateAndRedirectToSquare() {
+    const nameInput = document.getElementById('name');
+    const validationError = document.getElementById('validationError');
+    const errorMessage = document.getElementById('errorMessage');
+    const squareBtn = document.getElementById('squareBookingBtn');
+    
+    // Get and clean the name input
+    const name = nameInput.value.trim();
+    
+    // Clear any previous validation states
+    nameInput.classList.remove('is-invalid');
+    validationError.classList.add('d-none');
+    
+    // Validate name
+    if (!name) {
+        showValidationError('Please enter your full name to continue.', nameInput);
+        return;
+    }
+    
+    // Check if name has at least first and last name (2 words minimum)
+    const nameParts = name.split(/\s+/).filter(part => part.length > 0);
+    if (nameParts.length < 2) {
+        showValidationError('Please enter your first and last name.', nameInput);
+        return;
+    }
+    
+    // Check if name contains only valid characters (letters, spaces, hyphens, apostrophes)
+    const nameRegex = /^[a-zA-Z\s\-'\.]+$/;
+    if (!nameRegex.test(name)) {
+        showValidationError('Please enter a valid name using only letters.', nameInput);
+        return;
+    }
+    
+    // Check minimum length for each name part
+    const hasValidParts = nameParts.every(part => part.length >= 2);
+    if (!hasValidParts) {
+        showValidationError('Please enter your complete first and last name.', nameInput);
+        return;
+    }
+    
+    // If validation passes, show success and redirect
+    showLoadingState(squareBtn);
+    
+    // Optional: Submit form data to Netlify first (silent submission)
+    submitFormDataSilently();
+    
+    // Redirect to Square booking after a short delay
+    setTimeout(() => {
+        window.open('https://app.squareup.com/appointments/book/i5lmtpm1w9r58e/L7SWFKECT3D1E/start', '_blank', 'noopener,noreferrer');
+        resetButtonState(squareBtn);
+    }, 1000);
+}
+
+// Show validation error
+function showValidationError(message, inputElement) {
+    const validationError = document.getElementById('validationError');
+    const errorMessage = document.getElementById('errorMessage');
+    
+    errorMessage.textContent = message;
+    validationError.classList.remove('d-none');
+    inputElement.classList.add('is-invalid');
+    inputElement.focus();
+    
+    // Scroll to error message
+    validationError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Show loading state on button
+function showLoadingState(button) {
+    const originalText = button.textContent;
+    button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Opening Booking System...';
+    button.disabled = true;
+    button.setAttribute('data-original-text', originalText);
+}
+
+// Reset button state
+function resetButtonState(button) {
+    const originalText = button.getAttribute('data-original-text') || 'Schedule Appointment';
+    button.textContent = originalText;
+    button.disabled = false;
+    button.removeAttribute('data-original-text');
+}
+
+// Optional: Submit form data to Netlify silently
+function submitFormDataSilently() {
+    const form = document.getElementById('appointmentForm');
+    const formData = new FormData(form);
+    
+    // Only submit if we have the required name
+    const name = formData.get('name');
+    if (name && name.trim()) {
+        fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(formData).toString()
+        }).catch(error => {
+            console.log('Form submission note:', error);
+            // Don't show error to user since this is optional
+        });
+    }
+}
+
+// Clear validation errors when user starts typing
+document.addEventListener('DOMContentLoaded', function() {
+    const nameInput = document.getElementById('name');
+    const validationError = document.getElementById('validationError');
+    
+    if (nameInput) {
+        nameInput.addEventListener('input', function() {
+            if (this.classList.contains('is-invalid')) {
+                this.classList.remove('is-invalid');
+                if (validationError) {
+                    validationError.classList.add('d-none');
+                }
+            }
+        });
+    }
+});
+
+// Add this to your existing window object exports
+window.validateAndRedirectToSquare = validateAndRedirectToSquare;
+
+// Update the service modal "Book This Service" button to work with Square
+function updateServiceModalBooking() {
+    const bookButtons = document.querySelectorAll('[onclick*="scrollToSection(\'appointment\')"]');
+    bookButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Smooth scroll to appointment section
+            setTimeout(() => {
+                const squareContainer = document.getElementById('square-booking-container');
+                if (squareContainer) {
+                    squareContainer.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                    });
+                }
+            }, 500);
+        });
+    });
+}
+
+// Initialize the updated booking behavior
+document.addEventListener('DOMContentLoaded', function() {
+    updateServiceModalBooking();
+});
+
+// Remove the old form submission handlers since we're using Square now
+// Keep all other existing functions but remove handleFormSubmission and setupFormHandlers
+
 // Animation setup
 function setupAnimations() {
     // Initialize service cards for animation
