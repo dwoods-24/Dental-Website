@@ -110,19 +110,123 @@ function handleFormSubmission(form) {
     }, 2000);
 }
 
-// Service details modal setup
+// Service details modal setup with complete package information
 function setupServiceDetails() {
     const serviceDetails = {
-        'Essential Smile Package': '<strong>Price:</strong> Starting at $350 per arch<br><br><strong>Custom Shading:</strong> Pick the shade of existing teeth or desired shade and gum shades',
-        'Premium Smile Package': 'Straighten your teeth and correct bite issues with traditional metal braces, clear ceramic braces, or modern clear aligner therapy like Invisalign.',
-        'Elite Comfort Package': 'Expert surgical procedures including wisdom tooth extraction, dental implant placement, bone grafting, and other oral surgical treatments performed with precision and care.'
+        'Essential Smile Package': `
+            <div class="service-detail-content">
+                <div class="price-badge mb-3">
+                    <span class="badge bg-primary fs-6">Starting at $350 per arch</span>
+                </div>
+                
+                <div class="service-features">
+                    <h6 class="text-primary mb-2"><i class="bi bi-palette-fill me-2"></i>Custom Shading</h6>
+                    <p class="mb-3">Pick the shade of existing teeth or desired shade and gum shades</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-gear-fill me-2"></i>Fit & Function</h6>
+                    <p class="mb-3">Basic fit and function with wax try-in</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-tools me-2"></i>Materials</h6>
+                    <p class="mb-3">Standard acrylic materials</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-shield-check me-2"></i>Warranty</h6>
+                    <p class="mb-3">6 months against teeth popping out and breakage</p>
+                    
+                    <div class="ideal-for-section">
+                        <h6 class="text-success mb-2"><i class="bi bi-people-fill me-2"></i>Ideal For</h6>
+                        <p class="mb-0 fst-italic">Budget-conscious patients needing basic functionality</p>
+                    </div>
+                </div>
+            </div>
+        `,
+        
+        'Comfort Fit Package': `
+            <div class="service-detail-content">
+                <div class="price-badge mb-3">
+                    <span class="badge bg-primary fs-6">Starting at $750 per arch</span>
+                </div>
+                
+                <div class="service-features">
+                    <h6 class="text-primary mb-2"><i class="bi bi-palette-fill me-2"></i>Custom Shading</h6>
+                    <p class="mb-3">Pick the shade of existing teeth or desired shade and gum shades</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-gear-fill me-2"></i>Fit & Function</h6>
+                    <p class="mb-3">Improved fit with some customization with wax try-in</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-tools me-2"></i>Materials</h6>
+                    <p class="mb-3">Higher quality acrylic for better comfort</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-shield-check me-2"></i>Warranty</h6>
+                    <p class="mb-3">1 year against teeth popping out and breakage</p>
+                    
+                    <div class="ideal-for-section">
+                        <h6 class="text-success mb-2"><i class="bi bi-people-fill me-2"></i>Ideal For</h6>
+                        <p class="mb-0 fst-italic">Patients looking for a balance between cost and comfort</p>
+                    </div>
+                </div>
+            </div>
+        `,
+        
+        'Premium Smile Package': `
+            <div class="service-detail-content">
+                <div class="price-badge mb-3">
+                    <span class="badge bg-primary fs-6">$1,250 per arch</span>
+                </div>
+                
+                <div class="service-features">
+                    <h6 class="text-primary mb-2"><i class="bi bi-palette-fill me-2"></i>Custom Shading</h6>
+                    <p class="mb-3">Pick the shade of existing teeth or desired shade and gum shades</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-gear-fill me-2"></i>Fit & Function</h6>
+                    <p class="mb-3">Excellent fit and function with advanced customization with wax try-in</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-tools me-2"></i>Materials</h6>
+                    <p class="mb-3">Durable, high-quality materials resistant to cracks and stains</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-shield-check me-2"></i>Warranty</h6>
+                    <p class="mb-3">3 years against teeth popping out and breakage</p>
+                    
+                    <div class="ideal-for-section">
+                        <h6 class="text-success mb-2"><i class="bi bi-people-fill me-2"></i>Ideal For</h6>
+                        <p class="mb-0 fst-italic">Patients wanting a long-lasting and aesthetically pleasing solution</p>
+                    </div>
+                </div>
+            </div>
+        `,
+        
+        'Elite Comfort Package': `
+            <div class="service-detail-content">
+                <div class="price-badge mb-3">
+                    <span class="badge bg-primary fs-6">Starting at $1,750 per arch</span>
+                </div>
+                
+                <div class="service-features">
+                    <h6 class="text-primary mb-2"><i class="bi bi-palette-fill me-2"></i>Custom Shading</h6>
+                    <p class="mb-3">Pick the shade of existing teeth or desired shade and gum shades</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-gear-fill me-2"></i>Fit & Function</h6>
+                    <p class="mb-3">Superior fit with extensive customization options with wax try-in</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-tools me-2"></i>Materials</h6>
+                    <p class="mb-3">Premium materials for maximum durability and comfort</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-shield-check me-2"></i>Warranty</h6>
+                    <p class="mb-3">5 years against teeth popping out and breakage</p>
+                    
+                    <div class="ideal-for-section">
+                        <h6 class="text-success mb-2"><i class="bi bi-people-fill me-2"></i>Ideal For</h6>
+                        <p class="mb-0 fst-italic">Patients seeking the best in comfort, aesthetics, and longevity</p>
+                    </div>
+                </div>
+            </div>
+        `
     };
 
     // Store service details globally for modal access
     window.serviceDetails = serviceDetails;
 }
 
-// Show service details modal
+// Updated show service details modal function
 function showServiceDetails(service) {
     const modal = new bootstrap.Modal(document.getElementById('serviceModal'));
     const titleElement = document.getElementById('serviceTitle');
@@ -130,7 +234,7 @@ function showServiceDetails(service) {
     
     if (titleElement && descriptionElement && window.serviceDetails[service]) {
         titleElement.textContent = service;
-        descriptionElement.textContent = window.serviceDetails[service];
+        descriptionElement.innerHTML = window.serviceDetails[service];
         modal.show();
     }
 }
