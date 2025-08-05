@@ -113,6 +113,57 @@ function handleFormSubmission(form) {
 // Service details modal setup with complete package information
 function setupServiceDetails() {
     const serviceDetails = {
+        'Other Services': `
+            <div class="service-detail-content">
+                <div class="text-center mb-4">
+                    <p class="lead text-muted">We offer a comprehensive range of dental services to meet all your oral health needs</p>
+                </div>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="service-item p-3 bg-light rounded">
+                            <h6 class="text-primary mb-2"><i class="bi bi-scissors me-2"></i>Extractions</h6>
+                            <p class="mb-0 small">Safe and comfortable tooth removal procedures</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="service-item p-3 bg-light rounded">
+                            <h6 class="text-primary mb-2"><i class="bi bi-puzzle me-2"></i>Partials</h6>
+                            <p class="mb-0 small">Custom partial dentures to replace missing teeth</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="service-item p-3 bg-light rounded">
+                            <h6 class="text-primary mb-2"><i class="bi bi-arrow-clockwise me-2"></i>Relines</h6>
+                            <p class="mb-0 small">Denture adjustments for improved fit and comfort</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="service-item p-3 bg-light rounded">
+                            <h6 class="text-primary mb-2"><i class="bi bi-tools me-2"></i>Repairs</h6>
+                            <p class="mb-0 small">Quick and reliable denture repair services</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="service-item p-3 bg-light rounded">
+                            <h6 class="text-primary mb-2"><i class="bi bi-gem me-2"></i>Crowns</h6>
+                            <p class="mb-0 small">Protective caps to restore damaged teeth</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="service-item p-3 bg-light rounded">
+                            <h6 class="text-primary mb-2"><i class="bi bi-plus-circle me-2"></i>Implants</h6>
+                            <p class="mb-0 small">Permanent tooth replacement solutions</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <p class="text-muted mb-0"><em>Financing Available<br><br>Contact us for more information about any of these services</em></p>
+                </div>
+            </div>
+        `,
+        
         'Essential Smile Package': `
             <div class="service-detail-content">
                 <div class="price-badge mb-3">

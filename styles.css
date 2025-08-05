@@ -162,7 +162,7 @@ body {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
     border: 2px solid var(--primary-color) !important;
 }
-
+/*Services Section */
 .service-icon {
     height: 150px;
     width:280px;
@@ -176,6 +176,76 @@ body {
 
 .service-card:hover .service-icon {
     transform: scale(1.1);
+}
+
+/* Additional styles for Other Services modal */
+.service-detail-content .price-badge {
+    text-align: center;
+}
+
+.service-detail-content .service-features h6 {
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 5px;
+}
+
+.service-detail-content .ideal-for-section {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #28a745;
+}
+
+/* Other Services specific styles */
+.service-item {
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.service-item:hover {
+    background-color: #ffffff !important;
+    border-color: var(--primary-color) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.service-item h6 {
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.service-item .small {
+    color: #6c757d;
+    line-height: 1.4;
+}
+
+.service-icon .small {
+    height: 100px;
+    width: 240px;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+/* Make the modal larger for Other Services to accommodate the grid */
+.modal-dialog {
+    max-width: 600px;
+}
+
+@media (min-width: 768px) {
+    .modal-dialog {
+        max-width: 700px;
+    }
+}
+
+/* Responsive adjustments for Other Services grid */
+@media (max-width: 576px) {
+    .service-detail-content .row .col-md-6 {
+        margin-bottom: 1rem;
+    }
 }
 
 /* About Section */
