@@ -113,12 +113,9 @@ function handleFormSubmission(form) {
 // Service details modal setup
 function setupServiceDetails() {
     const serviceDetails = {
-        'General Dentistry': 'Comprehensive oral health care including routine cleanings, examinations, fillings, and preventive treatments. Our general dentistry services form the foundation of good oral health.',
-        'Cosmetic Dentistry': 'Transform your smile with professional teeth whitening, porcelain veneers, dental bonding, and smile makeovers. Achieve the confident smile you\'ve always wanted.',
-        'Orthodontics': 'Straighten your teeth and correct bite issues with traditional metal braces, clear ceramic braces, or modern clear aligner therapy like Invisalign.',
-        'Oral Surgery': 'Expert surgical procedures including wisdom tooth extraction, dental implant placement, bone grafting, and other oral surgical treatments performed with precision and care.',
-        'Pediatric Dentistry': 'Specialized dental care for infants, children, and teens. We create a fun, comfortable environment that helps kids develop positive associations with dental care.',
-        'Emergency Care': '24/7 emergency dental services for urgent situations including severe tooth pain, dental trauma, lost fillings, and other dental emergencies.'
+        'Essential Smile Package': '<strong>Price:</strong> Starting at $350 per arch<br><br><strong>Custom Shading:</strong> Pick the shade of existing teeth or desired shade and gum shades',
+        'Premium Smile Package': 'Straighten your teeth and correct bite issues with traditional metal braces, clear ceramic braces, or modern clear aligner therapy like Invisalign.',
+        'Elite Comfort Package': 'Expert surgical procedures including wisdom tooth extraction, dental implant placement, bone grafting, and other oral surgical treatments performed with precision and care.'
     };
 
     // Store service details globally for modal access
