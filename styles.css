@@ -36,7 +36,9 @@ body {
 }
 
 .tooth-icon {
-    display: inline-block;
+    display:inline-flexbox;
+    width:120px;
+    height:150px;
     animation: wiggle 2s ease-in-out infinite;
 }
 
