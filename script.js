@@ -1031,3 +1031,9 @@ document.addEventListener('DOMContentLoaded', function() {
 // Export functions for global access
 window.showForm = showForm;
 window.resetForms = resetForms;
+
+// Remove styling from all links
+document.querySelectorAll('a').forEach(link => {
+    link.style.color = 'inherit';
+    link.style.textDecoration = 'none';
+});
