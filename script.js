@@ -742,3 +742,292 @@ document.addEventListener('DOMContentLoaded', enhanceAccessibility);
 // Export functions for global access
 window.scrollToSection = scrollToSection;
 window.showServiceDetails = showServiceDetails;
+
+// Patient Forms JavaScript with Google Drive Integration
+
+// Show specific form
+function showForm(formType) {
+    // Hide all forms
+    document.querySelectorAll('.form-section').forEach(section => {
+        section.classList.add('d-none');
+    });
+    
+    // Show selected form
+    if (formType === 'newPatient') {
+        document.getElementById('newPatientForm').classList.remove('d-none');
+    } else if (formType === 'medicalHistory') {
+        document.getElementById('medicalHistoryForm').classList.remove('d-none');
+    }
+    
+    // Scroll to form
+    setTimeout(() => {
+        document.querySelector('.form-section:not(.d-none)').scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+        });
+    }, 100);
+}
+
+// Reset forms view
+function resetForms() {
+    document.querySelectorAll('.form-section').forEach(section => {
+        section.classList.add('d-none');
+    });
+    document.getElementById('successMessage').classList.add('d-none');
+    document.getElementById('backToForms').classList.add('d-none');
+    
+    // Reset form data
+    document.querySelectorAll('form').forEach(form => {
+        form.reset();
+    });
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Google Drive Integration Setup
+// You'll need to set up Google Apps Script for this to work
+/*Google Apps Script Information
+
+
+
+
+
+
+
+
+*/
+const GOOGLE_APPS_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE'; //Gogle Apps Script
+
+// Handle form submissions
+function handleFormSubmission(form, formType) {
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    
+    // Show loading state
+    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Submitting...';
+    submitBtn.disabled = true;
+    
+    // Collect form data
+    const formData = new FormData(form);
+    const timestamp = new Date().toISOString();
+    
+    // Add metadata
+    formData.append('submission_timestamp', timestamp);
+    formData.append('form_type', formType);
+    
+    // Convert FormData to object for easier handling
+    const formObject = {};
+    for (let [key, value] of formData.entries()) {
+        if (formObject[key]) {
+            // Handle multiple values (like checkboxes)
+            if (Array.isArray(formObject[key])) {
+                formObject[key].push(value);
+            } else {
+                formObject[key] = [formObject[key], value];
+            }
+        } else {
+            formObject[key] = value;
+        }
+    }
+    
+    // Send to Google Apps Script
+    sendToGoogleDrive(formObject)
+        .then(response => {
+            // Success
+            console.log('Form submitted successfully:', response);
+            showSuccessMessage();
+            form.reset();
+        })
+        .catch(error => {
+            // Error
+            console.error('Form submission error:', error);
+            showErrorMessage('There was an error submitting your form. Please try again or contact us directly.');
+        })
+        .finally(() => {
+            // Reset button
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        });
+}
+
+// Send data to Google Drive via Google Apps Script
+async function sendToGoogleDrive(formData) {
+    try {
+        const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Google Drive submission error:', error);
+        throw error;
+    }
+}
+
+// Alternative: Netlify Forms submission (as backup)
+async function sendToNetlify(form) {
+    try {
+        const formData = new FormData(form);
+        
+        const response = await fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(formData).toString()
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        return { success: true };
+    } catch (error) {
+        console.error('Netlify submission error:', error);
+        throw error;
+    }
+}
+
+// Show success message
+function showSuccessMessage() {
+    // Hide forms
+    document.querySelectorAll('.form-section').forEach(section => {
+        section.classList.add('d-none');
+    });
+    
+    // Show success message
+    document.getElementById('successMessage').classList.remove('d-none');
+    document.getElementById('backToForms').classList.remove('d-none');
+    
+    // Scroll to success message
+    document.getElementById('successMessage').scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'center' 
+    });
+}
+
+// Show error message
+function showErrorMessage(message) {
+    // Create or update error alert
+    let errorAlert = document.getElementById('errorMessage');
+    
+    if (!errorAlert) {
+        errorAlert = document.createElement('div');
+        errorAlert.id = 'errorMessage';
+        errorAlert.className = 'alert alert-danger mt-4';
+        document.querySelector('.container').appendChild(errorAlert);
+    }
+    
+    errorAlert.innerHTML = `
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <strong>Submission Error:</strong> ${message}
+    `;
+    errorAlert.classList.remove('d-none');
+    
+    // Scroll to error
+    errorAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    
+    // Hide error after 10 seconds
+    setTimeout(() => {
+        errorAlert.classList.add('d-none');
+    }, 10000);
+}
+
+// Form validation
+function validateForm(form) {
+    const requiredFields = form.querySelectorAll('[required]');
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            field.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            field.classList.remove('is-invalid');
+        }
+    });
+    
+    // Email validation
+    const emailFields = form.querySelectorAll('input[type="email"]');
+    emailFields.forEach(field => {
+        if (field.value && field.hasAttribute('required')) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(field.value)) {
+                field.classList.add('is-invalid');
+                isValid = false;
+            }
+        }
+    });
+    
+    return isValid;
+}
+
+// Initialize form event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    // New Patient Form
+    const newPatientForm = document.getElementById('newPatientFormData');
+    if (newPatientForm) {
+        newPatientForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (validateForm(this)) {
+                handleFormSubmission(this, 'New Patient Form');
+            } else {
+                showErrorMessage('Please fill in all required fields correctly.');
+            }
+        });
+    }
+    
+    // Medical History Form
+    const medicalHistoryForm = document.getElementById('medicalHistoryFormData');
+    if (medicalHistoryForm) {
+        medicalHistoryForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (validateForm(this)) {
+                handleFormSubmission(this, 'Medical History Form');
+            } else {
+                showErrorMessage('Please fill in all required fields correctly.');
+            }
+        });
+    }
+    
+    // Clear validation errors on input
+    document.addEventListener('input', function(e) {
+        if (e.target.classList.contains('is-invalid')) {
+            e.target.classList.remove('is-invalid');
+        }
+    });
+    
+    // Handle "None" checkbox for medical conditions
+    const noneCheckbox = document.getElementById('noneConditions');
+    const conditionCheckboxes = document.querySelectorAll('input[name="medical_conditions"]:not(#noneConditions)');
+    
+    if (noneCheckbox) {
+        noneCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                conditionCheckboxes.forEach(cb => cb.checked = false);
+            }
+        });
+        
+        conditionCheckboxes.forEach(cb => {
+            cb.addEventListener('change', function() {
+                if (this.checked) {
+                    noneCheckbox.checked = false;
+                }
+            });
+        });
+    }
+});
+
+// Export functions for global access
+window.showForm = showForm;
+window.resetForms = resetForms;
