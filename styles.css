@@ -570,6 +570,7 @@ html {
     overflow: hidden;
     background-color: #f8f9fa;
     position: relative;
+    height: 300px;
 }
 
 /* PDF iframe styling */
@@ -782,3 +783,17 @@ footer .copyright-link:active {
     text-decoration: none !important;
     opacity: 0.8;
 }
+
+
+/* PDF Viewer Styling */
+.pdf-viewer-container {
+    flex: 1;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    height: 800px;
+}
+
