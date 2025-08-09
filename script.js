@@ -801,7 +801,7 @@ function resetForms() {
 
 
 */
-const GOOGLE_APPS_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE'; //Google Apps Script
+const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxNpJnOPCU4C2VEjJdg432ktCtmOgcv121O2oYSx3eY6GUzIjuo9vx10nfJVHuTBjOe/exec'; //Google Apps Script
 
 // Handle form submissions
 function handleFormSubmission(form, formType) {
