@@ -766,3 +766,19 @@ html {
     color: white;
     box-shadow: 0 8px 25px rgba(220, 53, 69, 0.3);
 }
+
+/* Footer link styling */
+footer .copyright-link {
+    color: inherit !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease;
+}
+
+footer .copyright-link:hover,
+footer .copyright-link:focus,
+footer .copyright-link:visited,
+footer .copyright-link:active {
+    color: inherit !important;
+    text-decoration: none !important;
+    opacity: 0.8;
+}
