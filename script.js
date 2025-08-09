@@ -1536,7 +1536,9 @@ function submitForm() {
     const confirmed = confirm('Have you completed all required fields in the form?\n\nClick OK to proceed with submission instructions.');
     
     if (confirmed) {
+        submitToGoogleDrive(formData)
         showSubmissionInstructions();
+
     }
 }
 
