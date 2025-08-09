@@ -789,285 +789,34 @@ function resetForms() {
 
 
 
-// Google Drive Integration Setup
-// You'll need to set up Google Apps Script for this to work
-/*Google Apps Script Information
-
-
-
-
-
-
-
-
-*/
-const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxNpJnOPCU4C2VEjJdg432ktCtmOgcv121O2oYSx3eY6GUzIjuo9vx10nfJVHuTBjOe/exec'; //Google Apps Script
-
-// Handle form submissions
-function handleFormSubmission(form, formType) {
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
-    
-    // Show loading state
-    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Submitting...';
-    submitBtn.disabled = true;
-    
-    // Collect form data
-    const formData = new FormData(form);
-    const timestamp = new Date().toISOString();
-    
-    // Add metadata
-    formData.append('submission_timestamp', timestamp);
-    formData.append('form_type', formType);
-    
-    // Convert FormData to object for easier handling
-    const formObject = {};
-    for (let [key, value] of formData.entries()) {
-        if (formObject[key]) {
-            // Handle multiple values (like checkboxes)
-            if (Array.isArray(formObject[key])) {
-                formObject[key].push(value);
-            } else {
-                formObject[key] = [formObject[key], value];
-            }
-        } else {
-            formObject[key] = value;
-        }
-    }
-    
-    // Send to Google Apps Script
-    sendToGoogleDrive(formObject)
-        .then(response => {
-            // Success
-            console.log('Form submitted successfully:', response);
-            showSuccessMessage();
-            form.reset();
-        })
-        .catch(error => {
-            // Error
-            console.error('Form submission error:', error);
-            showErrorMessage('There was an error submitting your form. Please try again or contact us directly.');
-        })
-        .finally(() => {
-            // Reset button
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-        });
-}
-
-// Send data to Google Drive via Google Apps Script
-async function sendToGoogleDrive(formData) {
-    try {
-        const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData)
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        return await response.json();
-    } catch (error) {
-        console.error('Google Drive submission error:', error);
-        throw error;
-    }
-}
-
-// Alternative: Netlify Forms submission (as backup)
-async function sendToNetlify(form) {
-    try {
-        const formData = new FormData(form);
-        
-        const response = await fetch('/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams(formData).toString()
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        return { success: true };
-    } catch (error) {
-        console.error('Netlify submission error:', error);
-        throw error;
-    }
-}
-
-// Show success message
-function showSuccessMessage() {
-    // Hide forms
-    document.querySelectorAll('.form-section').forEach(section => {
-        section.classList.add('d-none');
-    });
-    
-    // Show success message
-    document.getElementById('successMessage').classList.remove('d-none');
-    document.getElementById('backToForms').classList.remove('d-none');
-    
-    // Scroll to success message
-    document.getElementById('successMessage').scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'center' 
-    });
-}
-
-// Show error message
-function showErrorMessage(message) {
-    // Create or update error alert
-    let errorAlert = document.getElementById('errorMessage');
-    
-    if (!errorAlert) {
-        errorAlert = document.createElement('div');
-        errorAlert.id = 'errorMessage';
-        errorAlert.className = 'alert alert-danger mt-4';
-        document.querySelector('.container').appendChild(errorAlert);
-    }
-    
-    errorAlert.innerHTML = `
-        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-        <strong>Submission Error:</strong> ${message}
-    `;
-    errorAlert.classList.remove('d-none');
-    
-    // Scroll to error
-    errorAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    
-    // Hide error after 10 seconds
-    setTimeout(() => {
-        errorAlert.classList.add('d-none');
-    }, 10000);
-}
-
-// Form validation
-function validateForm(form) {
-    const requiredFields = form.querySelectorAll('[required]');
-    let isValid = true;
-    
-    requiredFields.forEach(field => {
-        if (!field.value.trim()) {
-            field.classList.add('is-invalid');
-            isValid = false;
-        } else {
-            field.classList.remove('is-invalid');
-        }
-    });
-    
-    // Email validation
-    const emailFields = form.querySelectorAll('input[type="email"]');
-    emailFields.forEach(field => {
-        if (field.value && field.hasAttribute('required')) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(field.value)) {
-                field.classList.add('is-invalid');
-                isValid = false;
-            }
-        }
-    });
-    
-    return isValid;
-}
-
-// Initialize form event listeners
-document.addEventListener('DOMContentLoaded', function() {
-    // New Patient Form
-    const newPatientForm = document.getElementById('newPatientFormData');
-    if (newPatientForm) {
-        newPatientForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            if (validateForm(this)) {
-                handleFormSubmission(this, 'New Patient Form');
-            } else {
-                showErrorMessage('Please fill in all required fields correctly.');
-            }
-        });
-    }
-    
-    // Medical History Form
-    const medicalHistoryForm = document.getElementById('medicalHistoryFormData');
-    if (medicalHistoryForm) {
-        medicalHistoryForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            if (validateForm(this)) {
-                handleFormSubmission(this, 'Medical History Form');
-            } else {
-                showErrorMessage('Please fill in all required fields correctly.');
-            }
-        });
-    }
-    
-    // Clear validation errors on input
-    document.addEventListener('input', function(e) {
-        if (e.target.classList.contains('is-invalid')) {
-            e.target.classList.remove('is-invalid');
-        }
-    });
-    
-    // Handle "None" checkbox for medical conditions
-    const noneCheckbox = document.getElementById('noneConditions');
-    const conditionCheckboxes = document.querySelectorAll('input[name="medical_conditions"]:not(#noneConditions)');
-    
-    if (noneCheckbox) {
-        noneCheckbox.addEventListener('change', function() {
-            if (this.checked) {
-                conditionCheckboxes.forEach(cb => cb.checked = false);
-            }
-        });
-        
-        conditionCheckboxes.forEach(cb => {
-            cb.addEventListener('change', function() {
-                if (this.checked) {
-                    noneCheckbox.checked = false;
-                }
-            });
-        });
-    }
-});
-
-// Export functions for global access
-window.showForm = showForm;
-window.resetForms = resetForms;
-
-// Remove styling from all links
-document.querySelectorAll('a').forEach(link => {
-    link.style.color = 'inherit';
-    link.style.textDecoration = 'none';
-});
-
-
-
-
 // Working JavaScript for PDF Forms with Your Adobe Client ID
 
 // Adobe PDF Configuration
 const ADOBE_CLIENT_ID = '66b528fe05104cb7a46aaf28830b3ed6'; // Your actual Adobe client ID
 const PATIENT_FORM_PDF_PATH = '/pdf/patient_forms.pdf'; // Path to your PDF
+const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzbDGN4C517JcRh_DhdMWxfGHKT_aN_5YLFC9k4Jaf6b4KVGNeig36w2Jw_-6iBGsrO/exec';
 
 // Current form tracking
 let adobeDCView = null;
 let isAdobeReady = false;
+let currentPDFBlob = null;
 
-// Initialize when DOM loads
+//DOM Content Loaded Event
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Patient Forms page initialized');
-    console.log('PDF Path:', PATIENT_FORM_PDF_PATH);
-    console.log('Adobe Client ID configured:', ADOBE_CLIENT_ID);
-    
-    // Check if Adobe script loaded
-    if (window.AdobeDC) {
-        console.log('Adobe DC object found');
-    } else {
-        console.log('Adobe DC object not found - will use iframe');
-    }
+    initializeApp();
+    console.log('Patient Forms page initialized with PDF capture');
 });
+
+// Initialize Application (keeping all your existing functions)
+function initializeApp() {
+    setupScrollEffects();
+    setupNavigationHandlers();
+    setupFormHandlers();
+    setupServiceDetails();
+    setupAnimations();
+    setMinimumDate();
+    initializeSquareBooking();
+}
 
 // Wait for Adobe Acrobat Services PDF Embed API to be ready
 document.addEventListener("adobe_dc_view_sdk.ready", function () {
@@ -1100,17 +849,15 @@ function showPatientForm() {
     }
 }
 
-// Load PDF - now try Adobe first since we have the client ID
+//Load PDF with enhanced form capture capabilities
 function loadPatientPDF() {
     console.log('loadPatientPDF() called');
     
-    // Try Adobe first since we have the client ID configured
     if (window.AdobeDC && isAdobeReady) {
-        console.log('Attempting to load with Adobe API');
+        console.log('Attempting to load with Adobe API for PDF capture');
         loadWithAdobeAPI();
     } else if (window.AdobeDC) {
         console.log('Adobe available but not ready yet, waiting...');
-        // Wait a bit for Adobe to be ready
         setTimeout(() => {
             if (isAdobeReady) {
                 loadWithAdobeAPI();
@@ -1125,10 +872,10 @@ function loadPatientPDF() {
     }
 }
 
-// Load PDF with Adobe API (for future use)
+// Load PDF with Adobe API and set up PDF capture
 function loadWithAdobeAPI() {
     try {
-        console.log('Loading with Adobe API...');
+        console.log('Loading with Adobe API for PDF capture...');
         
         // Clear previous instance
         document.getElementById('adobe-dc-view').innerHTML = '';
@@ -1145,13 +892,11 @@ function loadWithAdobeAPI() {
             showThumbnails: false
         };
         
-        /* Initialize the AdobeDC View object */
         adobeDCView = new AdobeDC.View({
             clientId: ADOBE_CLIENT_ID,
             divId: "adobe-dc-view",
         });
         
-        /* Invoke the file preview API on Adobe DC View object */
         adobeDCView.previewFile({
             content: {
                 location: {
@@ -1163,11 +908,13 @@ function loadWithAdobeAPI() {
             }
         }, viewerConfig);
         
-        // Hide iframe fallback
+        // Set up PDF save callbacks for capturing filled form
+        setupPDFCaptureCallbacks();
+        
         document.getElementById('pdfIframe').style.display = 'none';
         document.getElementById('adobe-dc-view').style.display = 'block';
         
-        console.log('Adobe PDF loaded successfully');
+        console.log('Adobe PDF loaded successfully with capture capabilities');
         
     } catch (error) {
         console.error('Adobe PDF loading failed:', error);
@@ -1175,38 +922,493 @@ function loadWithAdobeAPI() {
     }
 }
 
-// Load PDF using iframe (this should always work)
+
+// Setup PDF capture callbacks
+function setupPDFCaptureCallbacks() {
+    if (!adobeDCView) return;
+    
+    try {
+        console.log('Setting up PDF capture callbacks...');
+        
+        // Register callback for PDF save/download to capture filled form
+        adobeDCView.registerCallback(
+            AdobeDC.View.Enum.CallbackType.SAVE_API,
+            function(metaData, content, options) {
+                console.log('PDF save callback triggered');
+                
+                // Store the PDF content for later upload
+                currentPDFBlob = content;
+                
+                console.log('PDF content captured for upload');
+                return new Promise((resolve) => {
+                    resolve({
+                        code: AdobeDC.View.Enum.ApiResponseCode.SUCCESS,
+                        data: {}
+                    });
+                });
+            },
+            {}
+        );
+        
+        console.log('PDF capture callbacks set up successfully');
+        
+    } catch (error) {
+        console.error('Error setting up PDF capture callbacks:', error);
+    }
+}
+
+
+
+// Load PDF using iframe fallback
 function loadWithIframe() {
-    console.log('Loading with iframe...');
+    console.log('Loading with iframe (limited PDF capture)...');
     
     const iframe = document.getElementById('pdfIframe');
     const adobeContainer = document.getElementById('adobe-dc-view');
     
     if (iframe) {
-        // Set iframe source
         iframe.src = PATIENT_FORM_PDF_PATH;
         iframe.style.display = 'block';
         console.log('Iframe src set to:', PATIENT_FORM_PDF_PATH);
         
-        // Hide Adobe container
         if (adobeContainer) {
             adobeContainer.style.display = 'none';
         }
         
-        // Add load event listener
         iframe.onload = function() {
-            console.log('PDF loaded successfully in iframe');
+            console.log('PDF loaded successfully in iframe (note: limited capture capabilities)');
         };
         
         iframe.onerror = function() {
             console.error('Failed to load PDF in iframe');
             showPDFError();
         };
-        
     } else {
         console.error('Iframe element not found');
     }
 }
+
+// Enhanced submit form function that captures and uploads the filled PDF
+function submitForm() {
+    console.log('submitForm() called - attempting to capture and upload filled PDF');
+    
+    // Show loading state
+    const submitBtn = document.querySelector('button[onclick="submitForm()"]');
+    if (submitBtn) {
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Preparing Submission...';
+        submitBtn.disabled = true;
+    }
+    
+    // Try to capture the filled PDF and submit
+    captureAndSubmitPDF()
+        .then((result) => {
+            console.log('PDF capture and submission completed successfully');
+            showSubmissionSuccess(result);
+        })
+        .catch(error => {
+            console.error('PDF capture/submission failed:', error);
+            showSubmissionError(error);
+        })
+        .finally(() => {
+            // Reset submit button
+            if (submitBtn) {
+                submitBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Submit Completed Form';
+                submitBtn.disabled = false;
+            }
+        });
+}
+
+// Capture filled PDF and submit to Google Drive
+async function captureAndSubmitPDF() {
+    try {
+        console.log('Starting PDF capture process...');
+        
+        // Get patient information first
+        const patientInfo = await promptForPatientInfo();
+        console.log('Patient info collected:', patientInfo.patient_name);
+        
+        // Try to capture the filled PDF
+        let pdfData = null;
+        let pdfFileName = `Patient_Form_${patientInfo.patient_name.replace(/\s+/g, '_')}.pdf`;
+        
+        if (adobeDCView && currentPDFBlob) {
+            console.log('Using captured PDF from Adobe viewer');
+            pdfData = await convertBlobToBase64(currentPDFBlob);
+        } else if (adobeDCView) {
+            console.log('Attempting to trigger PDF save for capture...');
+            try {
+                // Try to programmatically save the PDF to capture it
+                const apis = await adobeDCView.getAPIs();
+                if (apis && apis.save) {
+                    const saveResult = await apis.save();
+                    if (saveResult && saveResult.content) {
+                        pdfData = await convertBlobToBase64(saveResult.content);
+                        console.log('PDF captured via save API');
+                    }
+                }
+            } catch (saveError) {
+                console.log('Could not capture PDF via save API:', saveError);
+            }
+        }
+        
+        // Prepare submission data
+        const submissionData = {
+            ...patientInfo,
+            form_type: 'Patient Information Form',
+            submission_timestamp: new Date().toISOString(),
+            submission_method: 'Website PDF Form',
+            pdfData: pdfData,
+            pdfFileName: pdfFileName,
+            pdfCaptured: !!pdfData
+        };
+        
+        console.log('Submitting to Google Drive...');
+        const result = await submitToGoogleDrive(submissionData);
+        
+        return {
+            ...result,
+            patientInfo: patientInfo,
+            pdfCaptured: !!pdfData
+        };
+        
+    } catch (error) {
+        console.error('Error in PDF capture and submission:', error);
+        throw error;
+    }
+}
+
+// Convert blob to base64
+function convertBlobToBase64(blob) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            // Remove the data URL prefix to get just the base64 data
+            const base64Data = reader.result.split(',')[1];
+            resolve(base64Data);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
+}
+
+// Prompt user for patient information with enhanced form
+async function promptForPatientInfo() {
+    return new Promise((resolve, reject) => {
+        const modalHtml = `
+            <div class="modal fade show" style="display: block; background: rgba(0,0,0,0.5); z-index: 9999;">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title">
+                                <i class="bi bi-person-fill me-2"></i>Patient Information Required
+                            </h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="alert alert-info mb-4">
+                                <i class="bi bi-info-circle me-2"></i>
+                                <strong>Almost done!</strong> Please provide your information so we can organize your completed form properly.
+                            </div>
+                            
+                            <form id="patientInfoForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">First Name *</label>
+                                        <input type="text" class="form-control" id="firstName" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">Last Name *</label>
+                                        <input type="text" class="form-control" id="lastName" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">Email Address</label>
+                                        <input type="email" class="form-control" id="patientEmail" placeholder="your.email@example.com">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">Phone Number</label>
+                                        <input type="tel" class="form-control" id="patientPhone" placeholder="(615) 555-0123">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Date of Birth</label>
+                                    <input type="date" class="form-control" id="patientDob">
+                                </div>
+                                
+                                <div class="alert alert-success border-0 mt-4">
+                                    <i class="bi bi-shield-check me-2"></i>
+                                    <small><strong>Your filled PDF form will be saved with this information to our secure Google Drive system.</strong></small>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="cancelSubmission">
+                                <i class="bi bi-x me-1"></i>Cancel
+                            </button>
+                            <button type="button" class="btn btn-primary btn-lg" id="submitPatientInfo">
+                                <i class="bi bi-cloud-upload me-1"></i>Upload My Form
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        const modalElement = document.createElement('div');
+        modalElement.innerHTML = modalHtml;
+        document.body.appendChild(modalElement);
+        
+        // Handle form submission
+        document.getElementById('submitPatientInfo').addEventListener('click', () => {
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            
+            if (!firstName || !lastName) {
+                alert('Please enter both first and last name.');
+                return;
+            }
+            
+            const formData = {
+                first_name: firstName,
+                last_name: lastName,
+                patient_name: `${firstName} ${lastName}`,
+                email: document.getElementById('patientEmail').value.trim(),
+                phone: document.getElementById('patientPhone').value.trim(),
+                dob: document.getElementById('patientDob').value
+            };
+            
+            document.body.removeChild(modalElement);
+            resolve(formData);
+        });
+        
+        // Handle cancellation
+        document.getElementById('cancelSubmission').addEventListener('click', () => {
+            document.body.removeChild(modalElement);
+            reject(new Error('Submission cancelled by user'));
+        });
+        
+        // Focus on first name field
+        setTimeout(() => {
+            document.getElementById('firstName').focus();
+        }, 100);
+    });
+}
+
+
+// Submit to Google Apps Script
+async function submitToGoogleDrive(formData) {
+    try {
+        console.log('Submitting to Google Drive with PDF data...');
+        
+        const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        if (!result.success) {
+            throw new Error(result.message || 'Unknown error occurred');
+        }
+        
+        console.log('Successfully submitted to Google Drive:', result);
+        return result;
+        
+    } catch (error) {
+        console.error('Google Drive submission error:', error);
+        throw error;
+    }
+}
+
+// Show submission success with enhanced messaging
+function showSubmissionSuccess(result) {
+    const pdfContainer = document.getElementById('pdfFormContainer');
+    if (pdfContainer) {
+        pdfContainer.classList.add('d-none');
+    }
+    
+    const successModal = document.createElement('div');
+    successModal.className = 'modal fade show';
+    successModal.style.display = 'block';
+    successModal.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    successModal.style.zIndex = '9999';
+    successModal.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-check-circle-fill me-2"></i>Form Uploaded Successfully!
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" onclick="this.closest('.modal').remove(); window.location.reload();"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-file-earmark-check text-success" style="font-size: 4rem;"></i>
+                        <h6 class="text-success mt-3">Your completed PDF form has been securely uploaded!</h6>
+                        <p class="text-muted">Patient: <strong>${result.patientName || 'Unknown'}</strong></p>
+                        ${result.pdfCaptured ? 
+                            '<p class="text-success small"><i class="bi bi-check-circle me-1"></i>Filled PDF captured and uploaded</p>' : 
+                            '<p class="text-warning small"><i class="bi bi-exclamation-triangle me-1"></i>Form data saved (PDF capture unavailable)</p>'
+                        }
+                    </div>
+                    
+                    <div class="alert alert-success border-0 mb-4">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>What happens next:</strong> Your form has been organized in our system under your name. Our team will review it and contact you to confirm your appointment details.
+                    </div>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="card h-100 border-success">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-envelope text-success mb-2" style="font-size: 2rem;"></i>
+                                    <h6 class="card-title text-success">Email Copy</h6>
+                                    <p class="card-text small">Send yourself a blank copy</p>
+                                    <button class="btn btn-success btn-sm" onclick="emailForm(); this.closest('.modal').remove();">
+                                        <i class="bi bi-envelope me-1"></i>Email Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card h-100 border-primary">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-download text-primary mb-2" style="font-size: 2rem;"></i>
+                                    <h6 class="card-title text-primary">Download Blank</h6>
+                                    <p class="card-text small">Get a blank copy for records</p>
+                                    <button class="btn btn-primary btn-sm" onclick="downloadForm(); this.closest('.modal').remove();">
+                                        <i class="bi bi-download me-1"></i>Download
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card h-100 border-info">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-calendar-plus text-info mb-2" style="font-size: 2rem;"></i>
+                                    <h6 class="card-title text-info">Schedule Visit</h6>
+                                    <p class="card-text small">Book your appointment</p>
+                                    <button class="btn btn-info btn-sm" onclick="this.closest('.modal').remove(); scrollToSection('appointment');">
+                                        <i class="bi bi-calendar me-1"></i>Book Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4 pt-3 border-top">
+                        <p class="text-muted small mb-0">
+                            <i class="bi bi-shield-check me-1"></i>
+                            Your form is now securely stored in our Google Drive system organized by your name.
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" onclick="this.closest('.modal').remove(); window.location.reload();">
+                        <i class="bi bi-house me-1"></i>Return to Forms
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(successModal);
+    
+    // Auto-remove modal after 5 minutes
+    setTimeout(() => {
+        if (successModal.parentNode) {
+            successModal.remove();
+        }
+    }, 300000);
+}
+
+// Show submission error with helpful alternatives
+function showSubmissionError(error) {
+    const errorModal = document.createElement('div');
+    errorModal.className = 'modal fade show';
+    errorModal.style.display = 'block';
+    errorModal.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    errorModal.style.zIndex = '9999';
+    errorModal.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Upload Issue
+                    </h5>
+                    <button type="button" class="btn-close" onclick="this.closest('.modal').remove()"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="text-center mb-3">
+                        <i class="bi bi-cloud-slash text-warning" style="font-size: 3rem;"></i>
+                    </div>
+                    <p>There was an issue uploading your completed form to our system. Don't worry - you have several options to ensure we receive your information:</p>
+                    
+                    <div class="alert alert-info mb-3">
+                        <small><strong>Technical details:</strong> ${error.message || 'Unknown error occurred during upload'}</small>
+                    </div>
+                    
+                    <h6 class="text-primary mb-3">Alternative Submission Methods:</h6>
+                    
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="card border-success">
+                                <div class="card-body">
+                                    <h6 class="text-success"><i class="bi bi-envelope me-2"></i>Email Your Completed Form</h6>
+                                    <p class="card-text small mb-2">Save your completed PDF and email it to us directly</p>
+                                    <button class="btn btn-success btn-sm" onclick="emailForm(); this.closest('.modal').remove();">
+                                        <i class="bi bi-envelope me-1"></i>Email Form to Office
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <button class="btn btn-primary w-100" onclick="downloadForm(); this.closest('.modal').remove();">
+                                <i class="bi bi-download me-1"></i>Download Blank Form
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-info w-100" onclick="printForm(); this.closest('.modal').remove();">
+                                <i class="bi bi-printer me-1"></i>Print Current Form
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-primary mt-3">
+                        <i class="bi bi-telephone me-2"></i>
+                        <strong>Or call us directly:</strong> <a href="tel:615-719-7883" class="text-decoration-none">615-719-7883</a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" onclick="this.closest('.modal').remove();">
+                        <i class="bi bi-arrow-left me-1"></i>Try Upload Again
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(errorModal);
+}
+
+
+
+
+
+
+
+
 
 // Show error if PDF fails to load
 function showPDFError() {
@@ -1477,3 +1679,6 @@ window.debugForms = function() {
     console.log('Iframe:', !!document.getElementById('pdfIframe'));
     testPDFLoad();
 };
+
+
+
