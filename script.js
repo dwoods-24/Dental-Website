@@ -785,6 +785,10 @@ function resetForms() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+
+
+
+
 // Google Drive Integration Setup
 // You'll need to set up Google Apps Script for this to work
 /*Google Apps Script Information
@@ -797,7 +801,7 @@ function resetForms() {
 
 
 */
-const GOOGLE_APPS_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE'; //Gogle Apps Script
+const GOOGLE_APPS_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE'; //Google Apps Script
 
 // Handle form submissions
 function handleFormSubmission(form, formType) {
@@ -1037,3 +1041,439 @@ document.querySelectorAll('a').forEach(link => {
     link.style.color = 'inherit';
     link.style.textDecoration = 'none';
 });
+
+
+
+
+// Working JavaScript for PDF Forms with Your Adobe Client ID
+
+// Adobe PDF Configuration
+const ADOBE_CLIENT_ID = '66b528fe05104cb7a46aaf28830b3ed6'; // Your actual Adobe client ID
+const PATIENT_FORM_PDF_PATH = '/pdf/patient_forms.pdf'; // Path to your PDF
+
+// Current form tracking
+let adobeDCView = null;
+let isAdobeReady = false;
+
+// Initialize when DOM loads
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Patient Forms page initialized');
+    console.log('PDF Path:', PATIENT_FORM_PDF_PATH);
+    console.log('Adobe Client ID configured:', ADOBE_CLIENT_ID);
+    
+    // Check if Adobe script loaded
+    if (window.AdobeDC) {
+        console.log('Adobe DC object found');
+    } else {
+        console.log('Adobe DC object not found - will use iframe');
+    }
+});
+
+// Wait for Adobe Acrobat Services PDF Embed API to be ready
+document.addEventListener("adobe_dc_view_sdk.ready", function () {
+    console.log('Adobe PDF Embed API is ready');
+    isAdobeReady = true;
+});
+
+// Show patient PDF form
+function showPatientForm() {
+    console.log('showPatientForm() called');
+    
+    // Show PDF container
+    const container = document.getElementById('pdfFormContainer');
+    if (container) {
+        container.classList.remove('d-none');
+        console.log('PDF container shown');
+        
+        // Scroll to form
+        container.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+        });
+        
+        // Load PDF after a short delay to ensure container is visible
+        setTimeout(() => {
+            loadPatientPDF();
+        }, 500);
+    } else {
+        console.error('PDF container not found');
+    }
+}
+
+// Load PDF - now try Adobe first since we have the client ID
+function loadPatientPDF() {
+    console.log('loadPatientPDF() called');
+    
+    // Try Adobe first since we have the client ID configured
+    if (window.AdobeDC && isAdobeReady) {
+        console.log('Attempting to load with Adobe API');
+        loadWithAdobeAPI();
+    } else if (window.AdobeDC) {
+        console.log('Adobe available but not ready yet, waiting...');
+        // Wait a bit for Adobe to be ready
+        setTimeout(() => {
+            if (isAdobeReady) {
+                loadWithAdobeAPI();
+            } else {
+                console.log('Adobe still not ready, using iframe fallback');
+                loadWithIframe();
+            }
+        }, 2000);
+    } else {
+        console.log('Adobe not available, using iframe fallback');
+        loadWithIframe();
+    }
+}
+
+// Load PDF with Adobe API (for future use)
+function loadWithAdobeAPI() {
+    try {
+        console.log('Loading with Adobe API...');
+        
+        // Clear previous instance
+        document.getElementById('adobe-dc-view').innerHTML = '';
+        
+        var viewerConfig = {
+            embedMode: "SIZED_CONTAINER",
+            showAnnotationTools: false,
+            showLeftHandPanel: false,
+            showDownloadPDF: true,
+            showPrintPDF: true,
+            showZoomControl: true,
+            enableFormFilling: true,
+            showBookmarks: false,
+            showThumbnails: false
+        };
+        
+        /* Initialize the AdobeDC View object */
+        adobeDCView = new AdobeDC.View({
+            clientId: ADOBE_CLIENT_ID,
+            divId: "adobe-dc-view",
+        });
+        
+        /* Invoke the file preview API on Adobe DC View object */
+        adobeDCView.previewFile({
+            content: {
+                location: {
+                    url: window.location.origin + PATIENT_FORM_PDF_PATH,
+                },
+            },
+            metaData: {
+                fileName: "Patient Information Form.pdf"
+            }
+        }, viewerConfig);
+        
+        // Hide iframe fallback
+        document.getElementById('pdfIframe').style.display = 'none';
+        document.getElementById('adobe-dc-view').style.display = 'block';
+        
+        console.log('Adobe PDF loaded successfully');
+        
+    } catch (error) {
+        console.error('Adobe PDF loading failed:', error);
+        loadWithIframe();
+    }
+}
+
+// Load PDF using iframe (this should always work)
+function loadWithIframe() {
+    console.log('Loading with iframe...');
+    
+    const iframe = document.getElementById('pdfIframe');
+    const adobeContainer = document.getElementById('adobe-dc-view');
+    
+    if (iframe) {
+        // Set iframe source
+        iframe.src = PATIENT_FORM_PDF_PATH;
+        iframe.style.display = 'block';
+        console.log('Iframe src set to:', PATIENT_FORM_PDF_PATH);
+        
+        // Hide Adobe container
+        if (adobeContainer) {
+            adobeContainer.style.display = 'none';
+        }
+        
+        // Add load event listener
+        iframe.onload = function() {
+            console.log('PDF loaded successfully in iframe');
+        };
+        
+        iframe.onerror = function() {
+            console.error('Failed to load PDF in iframe');
+            showPDFError();
+        };
+        
+    } else {
+        console.error('Iframe element not found');
+    }
+}
+
+// Show error if PDF fails to load
+function showPDFError() {
+    const container = document.getElementById('adobe-dc-view');
+    if (container) {
+        container.innerHTML = `
+            <div class="alert alert-warning text-center" style="margin: 50px;">
+                <i class="bi bi-exclamation-triangle" style="font-size: 3rem;"></i>
+                <h4>PDF Not Found</h4>
+                <p>The patient form PDF could not be loaded.</p>
+                <p><strong>Please check:</strong></p>
+                <ul class="text-start" style="display: inline-block;">
+                    <li>PDF file exists at: <code>/pdf/patient-information-form.pdf</code></li>
+                    <li>File permissions are correct</li>
+                    <li>File is not corrupted</li>
+                </ul>
+                <div class="mt-3">
+                    <button class="btn btn-primary" onclick="loadPatientPDF()">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Try Again
+                    </button>
+                    <button class="btn btn-outline-secondary ms-2" onclick="closeForm()">
+                        <i class="bi bi-x-lg me-1"></i>Close
+                    </button>
+                </div>
+            </div>
+        `;
+        container.style.display = 'block';
+    }
+}
+
+// Close PDF form
+function closeForm() {
+    console.log('closeForm() called');
+    
+    const container = document.getElementById('pdfFormContainer');
+    if (container) {
+        container.classList.add('d-none');
+    }
+    
+    // Clear Adobe view
+    if (adobeDCView) {
+        document.getElementById('adobe-dc-view').innerHTML = '';
+        adobeDCView = null;
+    }
+    
+    // Clear iframe
+    const iframe = document.getElementById('pdfIframe');
+    if (iframe) {
+        iframe.src = '';
+    }
+    
+    // Scroll back to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Download PDF form
+function downloadForm() {
+    console.log('downloadForm() called');
+    
+    if (PATIENT_FORM_PDF_PATH) {
+        const link = document.createElement('a');
+        link.href = PATIENT_FORM_PDF_PATH;
+        link.download = 'Dentures_More_Patient_Information_Form.pdf';
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        console.log('Downloaded Patient Information PDF form');
+    }
+}
+
+// Print PDF form
+function printForm() {
+    console.log('printForm() called');
+    
+    if (adobeDCView) {
+        alert('Use the print button in the PDF viewer toolbar to print the form.');
+    } else {
+        // For iframe, try to print
+        const iframe = document.getElementById('pdfIframe');
+        if (iframe && iframe.contentWindow) {
+            try {
+                iframe.contentWindow.print();
+            } catch (error) {
+                console.error('Print failed:', error);
+                alert('Please use your browser\'s print function (Ctrl+P) to print the form.');
+            }
+        } else {
+            alert('Please use your browser\'s print function (Ctrl+P) to print the form.');
+        }
+    }
+}
+
+// Email PDF form
+function emailForm() {
+    console.log('emailForm() called');
+    
+    const email = 'denturesandmore1@yahoo.com';
+    const subject = 'Completed Patient Information Form';
+    const body = `Hello,
+
+Please find my completed Patient Information Form attached.
+
+Patient Information:
+- Form Type: Patient Information Form
+- Completed Date: ${new Date().toLocaleDateString()}
+
+I look forward to my appointment.
+
+Best regards`;
+    
+    // Create mailto link
+    const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoLink;
+    
+    // Show instructions
+    alert('Your email client will open. Please attach the completed PDF form before sending.');
+}
+
+// Submit PDF form
+function submitForm() {
+    console.log('submitForm() called');
+    
+    const confirmed = confirm('Have you completed all required fields in the form?\n\nClick OK to proceed with submission instructions.');
+    
+    if (confirmed) {
+        showSubmissionInstructions();
+    }
+}
+
+// Show submission instructions
+function showSubmissionInstructions() {
+    // Create modal for instructions
+    const instructionModal = document.createElement('div');
+    instructionModal.className = 'modal fade show';
+    instructionModal.style.display = 'block';
+    instructionModal.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    instructionModal.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-check-circle me-2"></i>Form Completion Instructions
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" onclick="this.closest('.modal').remove()"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-file-earmark-check text-success" style="font-size: 3rem;"></i>
+                        <h6 class="text-success mt-2">Ready to submit your form?</h6>
+                    </div>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="card h-100 border-success">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-envelope text-success mb-2" style="font-size: 2rem;"></i>
+                                    <h6 class="card-title text-success">Email Submission</h6>
+                                    <p class="card-text small">Email your completed form directly to our office</p>
+                                    <button class="btn btn-success btn-sm" onclick="emailForm(); this.closest('.modal').remove();">
+                                        <i class="bi bi-envelope me-1"></i>Email Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card h-100 border-primary">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-download text-primary mb-2" style="font-size: 2rem;"></i>
+                                    <h6 class="card-title text-primary">Download & Bring</h6>
+                                    <p class="card-text small">Download and bring the completed form to your appointment</p>
+                                    <button class="btn btn-primary btn-sm" onclick="downloadForm(); this.closest('.modal').remove();">
+                                        <i class="bi bi-download me-1"></i>Download
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info mt-4">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Important:</strong> Make sure to save or submit your completed form. 
+                        We'll review it before your appointment to provide the best possible care.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" onclick="this.closest('.modal').remove();">
+                        <i class="bi bi-arrow-left me-1"></i>Continue Editing
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(instructionModal);
+    
+    // Auto-remove modal after 60 seconds
+    setTimeout(() => {
+        if (instructionModal.parentNode) {
+            instructionModal.remove();
+        }
+    }, 60000);
+}
+
+// Test PDF availability
+function testPDFLoad() {
+    console.log('Testing PDF availability...');
+    
+    fetch(PATIENT_FORM_PDF_PATH)
+        .then(response => {
+            if (response.ok) {
+                console.log('✅ PDF file is accessible');
+            } else {
+                console.error('❌ PDF file not found or not accessible');
+                console.error('Response status:', response.status);
+            }
+        })
+        .catch(error => {
+            console.error('❌ Error accessing PDF:', error);
+        });
+}
+
+// Run PDF test on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Test PDF after a short delay
+    setTimeout(testPDFLoad, 1000);
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+    // Escape key to close form
+    if (e.key === 'Escape') {
+        const pdfContainer = document.getElementById('pdfFormContainer');
+        if (pdfContainer && !pdfContainer.classList.contains('d-none')) {
+            closeForm();
+        }
+    }
+    
+    // Ctrl+S or Cmd+S to download PDF
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        const pdfContainer = document.getElementById('pdfFormContainer');
+        if (pdfContainer && !pdfContainer.classList.contains('d-none')) {
+            e.preventDefault();
+            downloadForm();
+        }
+    }
+});
+
+// Export functions for global access
+window.showPatientForm = showPatientForm;
+window.closeForm = closeForm;
+window.downloadForm = downloadForm;
+window.printForm = printForm;
+window.emailForm = emailForm;
+window.submitForm = submitForm;
+
+// Debug function - call this in browser console to check setup
+window.debugForms = function() {
+    console.log('=== FORMS DEBUG INFO ===');
+    console.log('PDF Path:', PATIENT_FORM_PDF_PATH);
+    console.log('Adobe Client ID:', ADOBE_CLIENT_ID);
+    console.log('Adobe DC Available:', !!window.AdobeDC);
+    console.log('Adobe Ready:', isAdobeReady);
+    console.log('PDF Container:', !!document.getElementById('pdfFormContainer'));
+    console.log('Adobe Container:', !!document.getElementById('adobe-dc-view'));
+    console.log('Iframe:', !!document.getElementById('pdfIframe'));
+    testPDFLoad();
+};
