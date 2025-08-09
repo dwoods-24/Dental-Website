@@ -794,7 +794,7 @@ function resetForms() {
 // Adobe PDF Configuration
 const ADOBE_CLIENT_ID = '66b528fe05104cb7a46aaf28830b3ed6'; // Your actual Adobe client ID
 const PATIENT_FORM_PDF_PATH = '/pdf/patient_forms.pdf'; // Path to your PDF
-const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzbDGN4C517JcRh_DhdMWxfGHKT_aN_5YLFC9k4Jaf6b4KVGNeig36w2Jw_-6iBGsrO/exec';
+const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzxhyHwY4qtBymoWsz2FOcd5FuL7QC8cAmKQhR6VYIBTRtkWrBJmg6kz2ElbmZtHkl1/exec';
 
 // Current form tracking
 let adobeDCView = null;
