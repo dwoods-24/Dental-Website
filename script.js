@@ -1700,40 +1700,58 @@ const GOOGLE_APPOINTMENTS_CONFIG = {
 };
 
 // Simple redirect function to replace validateAndRedirectToSquare
+
+// Enhanced validation function that forces users back to required fields
 function validateAndRedirectToGoogleAppointments() {
     const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
     const validationError = document.getElementById('validationError');
     const errorMessage = document.getElementById('errorMessage');
     const bookingBtn = document.getElementById('squareBookingBtn');
     
-    // Get and clean the name input
+    // Get and clean the input values
     const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
     
     // Clear any previous validation states
     nameInput.classList.remove('is-invalid');
+    emailInput.classList.remove('is-invalid');
     validationError.classList.add('d-none');
     
-    // Validate name
+    // Check if name is empty first (highest priority)
     if (!name) {
-        showValidationError('Please enter your full name to continue.', nameInput);
+        showValidationErrorAndFocus('Please enter your full name to continue.', nameInput);
         return;
     }
     
-    // Check if name has at least first and last name (2 words minimum)
+    // Check if email is empty (second priority)
+    if (!email) {
+        showValidationErrorAndFocus('Please enter your email address for appointment confirmations.', emailInput);
+        return;
+    }
+    
+    // Validate name format
     const nameParts = name.split(/\s+/).filter(part => part.length > 0);
     if (nameParts.length < 2) {
-        showValidationError('Please enter your first and last name.', nameInput);
+        showValidationErrorAndFocus('Please enter your first and last name.', nameInput);
         return;
     }
     
     // Check if name contains only valid characters
     const nameRegex = /^[a-zA-Z\s\-'\.]+$/;
     if (!nameRegex.test(name)) {
-        showValidationError('Please enter a valid name using only letters.', nameInput);
+        showValidationErrorAndFocus('Please enter a valid name using only letters.', nameInput);
         return;
     }
     
-    // If validation passes, show loading and redirect
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showValidationErrorAndFocus('Please enter a valid email address.', emailInput);
+        return;
+    }
+    
+    // If all validation passes, proceed with booking
     showLoadingState(bookingBtn);
     
     // Optional: Submit form data to Netlify silently for your records
@@ -1749,19 +1767,229 @@ function validateAndRedirectToGoogleAppointments() {
     }, 1000);
 }
 
-// Show validation error (reuse existing function)
-function showValidationError(message, inputElement) {
+// Enhanced validation error function that forces focus and scrolls
+function showValidationErrorAndFocus(message, inputElement) {
     const validationError = document.getElementById('validationError');
     const errorMessage = document.getElementById('errorMessage');
     
+    // Show error message
     errorMessage.textContent = message;
     validationError.classList.remove('d-none');
+    
+    // Mark field as invalid
     inputElement.classList.add('is-invalid');
+    
+    // Force focus on the problematic field
     inputElement.focus();
     
-    // Scroll to error message
-    validationError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    // Smooth scroll to the input field with extra offset for visibility
+    const elementTop = inputElement.getBoundingClientRect().top + window.pageYOffset;
+    const offsetPosition = elementTop - 150; // Extra space above the field
+    
+    window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+    });
+    
+    // Add a subtle shake animation to draw attention
+    addShakeAnimation(inputElement);
+    
+    // Optional: Add a border flash effect
+    addBorderFlash(inputElement);
 }
+
+// Add shake animation to draw attention to the field
+function addShakeAnimation(element) {
+    element.style.animation = 'shake 0.5s ease-in-out';
+    
+    // Remove animation after it completes
+    setTimeout(() => {
+        element.style.animation = '';
+    }, 500);
+}
+
+// Add border flash effect
+function addBorderFlash(element) {
+    element.style.transition = 'border-color 0.3s ease, box-shadow 0.3s ease';
+    element.style.borderColor = '#dc3545';
+    element.style.boxShadow = '0 0 10px rgba(220, 53, 69, 0.3)';
+    
+    // Reset after a moment
+    setTimeout(() => {
+        element.style.transition = '';
+        element.style.borderColor = '';
+        element.style.boxShadow = '';
+    }, 2000);
+}
+
+// Clear validation when user starts typing in any field
+function setupEnhancedValidationClearance() {
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const validationError = document.getElementById('validationError');
+    
+    [nameInput, emailInput].forEach(input => {
+        if (input) {
+            // Clear validation on input
+            input.addEventListener('input', function() {
+                if (this.classList.contains('is-invalid')) {
+                    this.classList.remove('is-invalid');
+                    
+                    // If this was the last invalid field, hide error message
+                    const invalidFields = document.querySelectorAll('.is-invalid');
+                    if (invalidFields.length === 0 && validationError) {
+                        validationError.classList.add('d-none');
+                    }
+                }
+                
+                // Clear any special styling
+                this.style.borderColor = '';
+                this.style.boxShadow = '';
+                this.style.animation = '';
+            });
+            
+            // Also clear on focus (when user clicks/tabs to field)
+            input.addEventListener('focus', function() {
+                if (this.classList.contains('is-invalid')) {
+                    this.classList.remove('is-invalid');
+                    this.style.borderColor = '';
+                    this.style.boxShadow = '';
+                }
+            });
+        }
+    });
+}
+
+// Enhanced button state management
+function showLoadingState(button) {
+    const originalText = button.innerHTML;
+    button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Opening Google Appointments...';
+    button.disabled = true;
+    button.setAttribute('data-original-html', originalText);
+}
+
+function resetButtonState(button) {
+    const originalHTML = button.getAttribute('data-original-html') || '<i class="bi bi-calendar-plus me-2"></i>Schedule with Google';
+    button.innerHTML = originalHTML;
+    button.disabled = false;
+    button.removeAttribute('data-original-html');
+}
+
+// Enhanced redirect confirmation with better messaging
+function showRedirectConfirmation() {
+    const confirmationDiv = document.createElement('div');
+    confirmationDiv.className = 'alert alert-success mt-3 fade show';
+    confirmationDiv.innerHTML = `
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <strong>Redirected to Google Appointments!</strong><br>
+        <small>
+            If the booking page didn't open automatically, 
+            <a href="${GOOGLE_APPOINTMENTS_CONFIG.BOOKING_URL}" target="_blank" rel="noopener noreferrer" class="alert-link">
+                click here to schedule your appointment
+            </a>
+        </small>
+    `;
+    
+    const appointmentForm = document.getElementById('appointmentForm');
+    if (appointmentForm) {
+        appointmentForm.appendChild(confirmationDiv);
+        
+        // Remove confirmation after 15 seconds
+        setTimeout(() => {
+            if (confirmationDiv.parentNode) {
+                confirmationDiv.remove();
+            }
+        }, 15000);
+    }
+}
+
+// Add visual feedback for required fields
+function highlightRequiredFields() {
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    
+    [nameInput, emailInput].forEach(input => {
+        if (input) {
+            const label = document.querySelector(`label[for="${input.id}"]`);
+            if (label && !label.textContent.includes('*')) {
+                label.innerHTML = label.innerHTML.replace(/\*?$/, ' <span class="text-danger">*</span>');
+            }
+        }
+    });
+}
+
+// Initialize enhanced validation
+document.addEventListener('DOMContentLoaded', function() {
+    setupEnhancedValidationClearance();
+    highlightRequiredFields();
+    updateBookingButton();
+    
+    // Add shake animation CSS if it doesn't exist
+    addShakeAnimationCSS();
+});
+
+// Add shake animation CSS dynamically
+function addShakeAnimationCSS() {
+    if (!document.getElementById('shake-animation-styles')) {
+        const style = document.createElement('style');
+        style.id = 'shake-animation-styles';
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+                20%, 40%, 60%, 80% { transform: translateX(10px); }
+            }
+            
+            .form-control:focus.is-invalid,
+            .form-control.is-invalid:focus {
+                border-color: #dc3545;
+                box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+            }
+            
+            .required-field-highlight {
+                background-color: rgba(220, 53, 69, 0.05);
+                border-left: 3px solid #dc3545;
+                padding-left: 10px;
+                margin-left: -10px;
+                transition: all 0.3s ease;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+// Additional helper function to validate entire form and show all errors
+function validateEntireForm() {
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    let isValid = true;
+    let firstInvalidField = null;
+    
+    // Check name
+    if (!nameInput.value.trim()) {
+        nameInput.classList.add('is-invalid');
+        if (!firstInvalidField) firstInvalidField = nameInput;
+        isValid = false;
+    }
+    
+    // Check email
+    if (!emailInput.value.trim()) {
+        emailInput.classList.add('is-invalid');
+        if (!firstInvalidField) firstInvalidField = emailInput;
+        isValid = false;
+    }
+    
+    // If there are errors, focus on the first one
+    if (!isValid && firstInvalidField) {
+        showValidationErrorAndFocus('Please fill in all required fields.', firstInvalidField);
+    }
+    
+    return isValid;
+}
+
+// Export functions for global access
+window.validateAndRedirectToGoogleAppointments = validateAndRedirectToGoogleAppointments;
+window.validateEntireForm = validateEntireForm;
 
 // Show loading state on button
 function showLoadingState(button) {
