@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="/styles.css">
     <!--Ahrefs analytics-->
     <script src="https://analytics.ahrefs.com/analytics.js" data-key="sHUNmVlT6Ytcp+ApbOBOGw" async></script>
+    <!-- Google Calendar API - Add this line -->
+    <script src="https://apis.google.com/js/api.js" async defer></script>
     
     
 </head>
@@ -228,7 +230,7 @@
                                     <textarea class="form-control" id="message" name="message" rows="4" placeholder="Please describe any specific concerns or questions..."></textarea>
                                 </div>
                                 
-                                <!-- Square Booking Button with Validation -->
+                                <!-- Square Booking Button with Validation (Comment)
                                 <button type="button" 
                                         id="squareBookingBtn"
                                         class="btn btn-danger btn-lg w-100 rounded-pill py-3"
@@ -241,10 +243,50 @@
                                     <small><strong>Note:</strong> Clicking "Schedule Appointment" will open our booking system in a new window where you can select your preferred time slot.</small>
                                 </div>
                                 
-                                <!-- Error message for validation -->
+                                    Error message for validation (Comment)
                                 <div class="alert alert-danger mt-3 d-none" id="validationError">
                                     <i class="bi bi-exclamation-triangle-fill me-2"></i>
                                     <span id="errorMessage">Please enter your full name to continue.</span>
+                                </div> -->
+
+                                <!-- Updated Google Calendar Booking Button -->
+                                <button type="button" 
+                                        id="squareBookingBtn"
+                                        class="btn btn-primary btn-lg w-100 rounded-pill py-3"
+                                        onclick="validateAndRedirectToGoogleAppointments()">
+                                    <i class="bi bi-calendar-plus me-2"></i>Schedule Appointment
+                                </button>
+
+                                <!-- 2. Update the info alert text -->
+                                <div class="alert alert-info mt-3" role="alert">
+                                    <i class="bi bi-info-circle-fill me-2"></i>
+                                    <small><strong>Note:</strong> Clicking "Schedule Appointment" will open our Google Appointments booking page in a new window where you can select your preferred time slot.</small>
+                                </div>
+
+                                <!-- 3. Optional: Add a direct link as backup -->
+                                <div class="text-center mt-3">
+                                    <p class="small text-muted">
+                                        Or <a href="https://calendar.app.google/ou5iQJjVLUCM3adB7" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+                                            click here to go directly to our booking page
+                                        </a>
+                                    </p>
+                                </div>
+
+                                <!-- 4. Alternative booking section (keep this as is for backup) -->
+                                <div class="border-top pt-3 mt-3">
+                                    <h6 class="text-center mb-3">Alternative Booking Methods</h6>
+                                    <div class="row g-2">
+                                        <div class="col-md-6">
+                                            <a href="tel:615-719-7883" class="btn btn-outline-dark w-100">
+                                                <i class="bi bi-telephone me-2"></i>Call: 615-719-7883
+                                            </a>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <a href="mailto:denturesandmore1@yahoo.com" class="btn btn-outline-dark w-100">
+                                                <i class="bi bi-envelope me-2"></i>Email Us
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                         </div>

@@ -1683,3 +1683,213 @@ window.debugForms = function() {
 
 
 
+
+
+
+/* Google Calendar Integration*/
+
+// Simple Google Appointments Redirect - Replace Square Booking
+// Add this to your existing script.js file
+
+// Google Appointments Configuration
+const GOOGLE_APPOINTMENTS_CONFIG = {
+    // Replace with your actual Google Appointments booking URL
+    BOOKING_URL: 'https://calendar.app.google/ou5iQJjVLUCM3adB7',
+    // Or if you're using Google My Business booking:
+    // BOOKING_URL: 'https://www.google.com/maps/reserve/v/dine/merchant_id/your-merchant-id'
+};
+
+// Simple redirect function to replace validateAndRedirectToSquare
+function validateAndRedirectToGoogleAppointments() {
+    const nameInput = document.getElementById('name');
+    const validationError = document.getElementById('validationError');
+    const errorMessage = document.getElementById('errorMessage');
+    const bookingBtn = document.getElementById('squareBookingBtn');
+    
+    // Get and clean the name input
+    const name = nameInput.value.trim();
+    
+    // Clear any previous validation states
+    nameInput.classList.remove('is-invalid');
+    validationError.classList.add('d-none');
+    
+    // Validate name
+    if (!name) {
+        showValidationError('Please enter your full name to continue.', nameInput);
+        return;
+    }
+    
+    // Check if name has at least first and last name (2 words minimum)
+    const nameParts = name.split(/\s+/).filter(part => part.length > 0);
+    if (nameParts.length < 2) {
+        showValidationError('Please enter your first and last name.', nameInput);
+        return;
+    }
+    
+    // Check if name contains only valid characters
+    const nameRegex = /^[a-zA-Z\s\-'\.]+$/;
+    if (!nameRegex.test(name)) {
+        showValidationError('Please enter a valid name using only letters.', nameInput);
+        return;
+    }
+    
+    // If validation passes, show loading and redirect
+    showLoadingState(bookingBtn);
+    
+    // Optional: Submit form data to Netlify silently for your records
+    submitFormDataSilently();
+    
+    // Redirect to Google Appointments after a short delay
+    setTimeout(() => {
+        window.open(GOOGLE_APPOINTMENTS_CONFIG.BOOKING_URL, '_blank', 'noopener,noreferrer');
+        resetButtonState(bookingBtn);
+        
+        // Show confirmation message
+        showRedirectConfirmation();
+    }, 1000);
+}
+
+// Show validation error (reuse existing function)
+function showValidationError(message, inputElement) {
+    const validationError = document.getElementById('validationError');
+    const errorMessage = document.getElementById('errorMessage');
+    
+    errorMessage.textContent = message;
+    validationError.classList.remove('d-none');
+    inputElement.classList.add('is-invalid');
+    inputElement.focus();
+    
+    // Scroll to error message
+    validationError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Show loading state on button
+function showLoadingState(button) {
+    const originalText = button.textContent;
+    button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Opening Google Appointments...';
+    button.disabled = true;
+    button.setAttribute('data-original-text', originalText);
+}
+
+// Reset button state
+function resetButtonState(button) {
+    const originalText = button.getAttribute('data-original-text') || 'Schedule Appointment';
+    button.textContent = originalText;
+    button.disabled = false;
+    button.removeAttribute('data-original-text');
+}
+
+// Submit form data silently to Netlify for your records (optional)
+function submitFormDataSilently() {
+    const form = document.getElementById('appointmentForm');
+    const formData = new FormData(form);
+    
+    // Only submit if we have the required name
+    const name = formData.get('name');
+    if (name && name.trim()) {
+        // Add timestamp and redirect info
+        formData.append('redirect_to', 'Google Appointments');
+        formData.append('submission_time', new Date().toISOString());
+        
+        fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(formData).toString()
+        }).catch(error => {
+            console.log('Form submission note:', error);
+            // Don't show error to user since this is optional
+        });
+    }
+}
+
+// Show redirect confirmation
+function showRedirectConfirmation() {
+    const confirmationDiv = document.createElement('div');
+    confirmationDiv.className = 'alert alert-success mt-3 fade show';
+    confirmationDiv.innerHTML = `
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <strong>Redirected to Google Appointments!</strong><br>
+        <small>If the booking page didn't open, <a href="${GOOGLE_APPOINTMENTS_CONFIG.BOOKING_URL}" target="_blank" rel="noopener noreferrer">click here</a> to schedule your appointment.</small>
+    `;
+    
+    const appointmentForm = document.getElementById('appointmentForm');
+    if (appointmentForm) {
+        appointmentForm.appendChild(confirmationDiv);
+        
+        // Remove confirmation after 10 seconds
+        setTimeout(() => {
+            confirmationDiv.remove();
+        }, 10000);
+    }
+}
+
+// Update the booking button when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    updateBookingButton();
+    setupValidationClearance();
+});
+
+// Update booking button to use Google Appointments
+function updateBookingButton() {
+    const bookingBtn = document.getElementById('squareBookingBtn');
+    if (bookingBtn) {
+        // Update the onclick function
+        bookingBtn.onclick = validateAndRedirectToGoogleAppointments;
+        
+        // Update button text
+        bookingBtn.innerHTML = '<i class="bi bi-calendar-plus me-2"></i>Schedule Appointment';
+        
+        // Update button styling if needed
+        bookingBtn.classList.remove('btn-danger');
+        bookingBtn.classList.add('btn-primary');
+    }
+    
+    // Update info alert
+    const infoAlert = document.querySelector('#appointment .alert-info');
+    if (infoAlert) {
+        infoAlert.innerHTML = `
+            <i class="bi bi-info-circle-fill me-2"></i>
+            <small><strong>Note:</strong> Clicking "Schedule Appointment" will open our Google Appointments booking page in a new window where you can select your preferred time slot.</small>
+        `;
+    }
+}
+
+// Setup validation clearance when user types
+function setupValidationClearance() {
+    const nameInput = document.getElementById('name');
+    const validationError = document.getElementById('validationError');
+    
+    if (nameInput) {
+        nameInput.addEventListener('input', function() {
+            if (this.classList.contains('is-invalid')) {
+                this.classList.remove('is-invalid');
+                if (validationError) {
+                    validationError.classList.add('d-none');
+                }
+            }
+        });
+    }
+}
+
+// Export function for global access
+window.validateAndRedirectToGoogleAppointments = validateAndRedirectToGoogleAppointments;
+
+// If you want to completely remove Square references, add this:
+function removeSquareReferences() {
+    // Remove any Square-related elements or scripts
+    const squareElements = document.querySelectorAll('[id*="square"], [class*="square"]');
+    squareElements.forEach(element => {
+        if (element.id !== 'squareBookingBtn') { // Keep the button, just repurpose it
+            element.remove();
+        }
+    });
+    
+    // Remove Square scripts if they exist
+    const scripts = document.querySelectorAll('script[src*="square"]');
+    scripts.forEach(script => script.remove());
+}
+
+// Call this if you want to clean up Square references
+// removeSquareReferences();
+
+
