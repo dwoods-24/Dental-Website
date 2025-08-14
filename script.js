@@ -431,7 +431,7 @@ function validateAndRedirectToGoogleAppointments() {
     
     // Redirect to Google Appointments after a short delay
     setTimeout(() => {
-        window.open(GOOGLE_APPOINTMENTS_CONFIG.BOOKING_URL, '_blank', 'noopener,noreferrer');
+        //window.open(GOOGLE_APPOINTMENTS_CONFIG.BOOKING_URL, '_blank', 'noopener,noreferrer');
         resetButtonState(bookingBtn);
         
         // Show confirmation message
@@ -535,13 +535,13 @@ function setupEnhancedValidationClearance() {
 // Enhanced button state management
 function showLoadingState(button) {
     const originalText = button.innerHTML;
-    button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Opening Google Appointments...';
+    button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Submitting...';
     button.disabled = true;
     button.setAttribute('data-original-html', originalText);
 }
 
 function resetButtonState(button) {
-    const originalHTML = button.getAttribute('data-original-html') || '<i class="bi bi-calendar-plus me-2"></i>Schedule with Google';
+    const originalHTML = button.getAttribute('data-original-html') || '<i class="bi bi-calendar-plus me-2"></i>Schedule Appointment';
     button.innerHTML = originalHTML;
     button.disabled = false;
     button.removeAttribute('data-original-html');
@@ -553,12 +553,9 @@ function showRedirectConfirmation() {
     confirmationDiv.className = 'alert alert-success mt-3 fade show';
     confirmationDiv.innerHTML = `
         <i class="bi bi-check-circle-fill me-2"></i>
-        <strong>Redirected to Google Appointments!</strong><br>
+        <strong>Submitted Successfully!</strong><br>
         <small>
-            If the booking page didn't open automatically, 
-            <a href="${GOOGLE_APPOINTMENTS_CONFIG.BOOKING_URL}" target="_blank" rel="noopener noreferrer" class="alert-link">
-                click here to schedule your appointment
-            </a>
+            Our staff will reach out to you shortly!
         </small>
     `;
     
