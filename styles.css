@@ -86,9 +86,111 @@ body {
     transform: scale(1.05);
 }
 
+
+/*Banner Section*/
+#banner {
+    min-height: 250px;
+    max-height: 60vh;
+    position: relative;
+    overflow:hidden;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+#banner picture {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+#banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.3s ease;
+}
+
+/* Bottom-centered banner text with gradient overlay */
+.banner-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 40px 20px 30px;
+    z-index: 2;
+}
+
+.banner-content {
+    text-align: center;
+    color: white;
+    z-index: 3;
+}
+
+/* Animation for text appearance */
+.banner-content {
+    animation: slideUpFade 1s ease-out 0.5s both;
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive banner heights */
+@media (min-width: 768px) {
+    #banner {
+        min-height: 300px;
+    }
+}
+
+@media (min-width: 1200px) {
+    #banner {
+        min-height: 350px;
+    }
+}
+
+/* Adjust hero section height */
+.hero {
+    height: 85vh; /* Reduced from 100vh to accommodate banner */
+}
+
+/* Fade-in animation for banner */
+@keyframes fadeInBanner {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#banner {
+    animation: fadeInBanner 1s ease-out;
+}
+
+
+
+
+
+
+
+
+
 /* Hero Section */
 .hero {
-    height: 100vh;
+    height: 90vh;
     background: linear-gradient(135deg, #8BC34A 0%, #2196F3 100%);
     position: relative;
     overflow: hidden;
