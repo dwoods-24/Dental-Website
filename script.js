@@ -426,9 +426,6 @@ function validateAndRedirectToGoogleAppointments() {
     // If all validation passes, proceed with booking
     showLoadingState(bookingBtn);
     
-    // Optional: Submit form data to Netlify silently for your records
-    submitFormDataSilently();
-    
     // Redirect to Google Appointments after a short delay
     setTimeout(() => {
         //window.open(GOOGLE_APPOINTMENTS_CONFIG.BOOKING_URL, '_blank', 'noopener,noreferrer');
@@ -642,28 +639,7 @@ function updateBookingButton() {
     }
 }
 
-// Submit form data silently to Netlify for your records (optional)
-function submitFormDataSilently() {
-    const form = document.getElementById('appointmentForm');
-    const formData = new FormData(form);
-    
-    // Only submit if we have the required name
-    const name = formData.get('name');
-    if (name && name.trim()) {
-        // Add timestamp and redirect info
-        formData.append('redirect_to', 'Google Appointments');
-        formData.append('submission_time', new Date().toISOString());
-        
-        fetch('/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams(formData).toString()
-        }).catch(error => {
-            console.log('Form submission note:', error);
-            // Don't show error to user since this is optional
-        });
-    }
-}
+
 
 // Keyboard navigation support
 document.addEventListener('keydown', function(e) {
