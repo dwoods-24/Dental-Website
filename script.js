@@ -368,13 +368,11 @@ function formatTimeInput(timeString) {
     return formatted;
 }
 
-// Google Appointments Configuration
-const GOOGLE_APPOINTMENTS_CONFIG = {
-    BOOKING_URL: 'https://calendar.app.google/ou5iQJjVLUCM3adB7'
-};
 
-// Enhanced validation function that forces users back to required fields
-function validateAndRedirectToGoogleAppointments() {
+
+
+// Enhanced appointment form submission to Netlify
+function validateAndSubmitAppointmentToNetlify() {
     const nameInput = document.getElementById('name');
     const phoneInput = document.getElementById('phone');
     const validationError = document.getElementById('validationError');
@@ -423,18 +421,298 @@ function validateAndRedirectToGoogleAppointments() {
         return;
     }
     
-    // If all validation passes, proceed with booking
+    // If all validation passes, submit to Netlify
     showLoadingState(bookingBtn);
     
-    // Redirect to Google Appointments after a short delay
-    setTimeout(() => {
-        //window.open(GOOGLE_APPOINTMENTS_CONFIG.BOOKING_URL, '_blank', 'noopener,noreferrer');
-        resetButtonState(bookingBtn);
-        
-        // Show confirmation message
-        showRedirectConfirmation();
-    }, 1000);
+    // Submit the appointment form to Netlify
+    submitAppointmentToNetlify()
+        .then((result) => {
+            console.log('Appointment submission successful:', result);
+            showAppointmentSubmissionSuccess();
+        })
+        .catch((error) => {
+            console.error('Appointment submission failed:', error);
+            showAppointmentSubmissionError(error);
+        })
+        .finally(() => {
+            resetButtonState(bookingBtn);
+        });
 }
+
+// Submit appointment form data to Netlify
+async function submitAppointmentToNetlify() {
+    try {
+        console.log('Submitting appointment to Netlify...');
+        
+        // Get all form data
+        const formData = new FormData();
+        formData.append('form-name', 'appointment-requests');
+        formData.append('name', document.getElementById('name').value.trim());
+        formData.append('phone', document.getElementById('phone').value.trim());
+        formData.append('email', document.getElementById('email').value.trim());
+        formData.append('service', document.getElementById('service').value);
+        formData.append('date', document.getElementById('date').value);
+        formData.append('time', document.getElementById('time').value.trim());
+        formData.append('message', document.getElementById('message').value.trim());
+        formData.append('submission_timestamp', new Date().toISOString());
+        
+        const response = await fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(formData)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Netlify submission failed: ${response.status}`);
+        }
+        
+        console.log('Successfully submitted appointment to Netlify');
+        return { success: true };
+        
+    } catch (error) {
+        console.error('Netlify appointment submission error:', error);
+        throw error;
+    }
+}
+
+// Show appointment submission success
+function showAppointmentSubmissionSuccess() {
+    // Hide validation errors
+    const validationError = document.getElementById('validationError');
+    if (validationError) {
+        validationError.classList.add('d-none');
+    }
+    
+    // Create success message
+    const successDiv = document.createElement('div');
+    successDiv.className = 'alert alert-success mt-3 fade show';
+    successDiv.innerHTML = `
+        <div class="d-flex align-items-center">
+            <i class="bi bi-check-circle-fill me-3" style="font-size: 1.5rem;"></i>
+            <div>
+                <h5 class="alert-heading mb-1">Appointment Request Submitted!</h5>
+                <p class="mb-2">Thank you! We've received your appointment request and will contact you shortly to confirm your preferred time slot.</p>
+                <hr class="my-2">
+                <p class="mb-0">
+                    <small>
+                        <i class="bi bi-telephone me-1"></i>
+                        <strong>Urgent?</strong> Call us directly at <a href="tel:615-719-7883" class="text-decoration-none fw-bold">615-719-7883</a>
+                    </small>
+                </p>
+            </div>
+        </div>
+    `;
+    
+    const appointmentForm = document.getElementById('appointmentForm');
+    if (appointmentForm) {
+        // Clear the form
+        appointmentForm.reset();
+        
+        // Add success message
+        appointmentForm.appendChild(successDiv);
+        
+        // Remove success message after 15 seconds
+        setTimeout(() => {
+            if (successDiv.parentNode) {
+                successDiv.remove();
+            }
+        }, 15000);
+        
+        // Scroll to success message
+        successDiv.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+        });
+    }
+}
+
+// Show appointment submission error
+function showAppointmentSubmissionError(error) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'alert alert-warning mt-3 fade show';
+    errorDiv.innerHTML = `
+        <div class="d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle-fill me-3" style="font-size: 1.5rem;"></i>
+            <div>
+                <h5 class="alert-heading mb-1">Submission Issue</h5>
+                <p class="mb-2">There was an issue submitting your appointment request online. Please try one of these alternatives:</p>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <a href="tel:615-719-7883" class="btn btn-warning btn-sm w-100">
+                            <i class="bi bi-telephone me-1"></i>Call: 615-719-7883
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="mailto:denturesandmore1@yahoo.com" class="btn btn-outline-warning btn-sm w-100">
+                            <i class="bi bi-envelope me-1"></i>Email Us
+                        </a>
+                    </div>
+                </div>
+                <hr class="my-2">
+                <p class="mb-0">
+                    <small>
+                        <strong>Technical details:</strong> ${error.message || 'Unknown error occurred'}
+                    </small>
+                </p>
+            </div>
+        </div>
+    `;
+    
+    const appointmentForm = document.getElementById('appointmentForm');
+    if (appointmentForm) {
+        appointmentForm.appendChild(errorDiv);
+        
+        // Remove error message after 30 seconds
+        setTimeout(() => {
+            if (errorDiv.parentNode) {
+                errorDiv.remove();
+            }
+        }, 30000);
+        
+        // Scroll to error message
+        errorDiv.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+        });
+    }
+}
+
+// Alternative function that submits to Netlify AND opens Google Appointments
+function validateAndSubmitThenRedirect() {
+    const nameInput = document.getElementById('name');
+    const phoneInput = document.getElementById('phone');
+    const validationError = document.getElementById('validationError');
+    const errorMessage = document.getElementById('errorMessage');
+    const bookingBtn = document.getElementById('squareBookingBtn');
+    
+    // Get and clean the input values
+    const name = nameInput.value.trim();
+    const phone = phoneInput.value.trim();
+    
+    // Clear any previous validation states
+    nameInput.classList.remove('is-invalid');
+    phoneInput.classList.remove('is-invalid');
+    validationError.classList.add('d-none');
+    
+    // Check if name is empty first (highest priority)
+    if (!name) {
+        showValidationErrorAndFocus('Please enter your full name to continue.', nameInput);
+        return;
+    }
+    
+    // Check if phone is empty (second priority)
+    if (!phone) {
+        showValidationErrorAndFocus('Please enter your phone number for appointment confirmations.', phoneInput);
+        return;
+    }
+    
+    // Validate name format ONLY if name has content
+    const nameParts = name.split(/\s+/).filter(part => part.length > 0);
+    if (nameParts.length < 2) {
+        showValidationErrorAndFocus('Please enter your first and last name.', nameInput);
+        return;
+    }
+    
+    // Check if name contains only valid characters ONLY if name has content
+    const nameRegex = /^[a-zA-Z\s\-'\.]+$/;
+    if (!nameRegex.test(name)) {
+        showValidationErrorAndFocus('Please enter a valid name using only letters.', nameInput);
+        return;
+    }
+    
+    // Validate phone format ONLY if phone has content
+    const phoneRegex = /^[\d\s\-\(\)\+]+$/;
+    if (!phoneRegex.test(phone) || phone.replace(/\D/g, '').length < 10) {
+        showValidationErrorAndFocus('Please enter a valid phone number (at least 10 digits).', phoneInput);
+        return;
+    }
+    
+    // If all validation passes, submit to Netlify first, then redirect
+    showLoadingState(bookingBtn);
+    
+    // Submit the appointment form to Netlify
+    submitAppointmentToNetlify()
+        .then((result) => {
+            console.log('Appointment submission successful, opening Google Appointments...');
+            
+            // Open Google Appointments after successful submission
+            setTimeout(() => {
+                window.open(GOOGLE_APPOINTMENTS_CONFIG.BOOKING_URL, '_blank', 'noopener,noreferrer');
+            }, 1000);
+            
+            showAppointmentSubmissionWithRedirectSuccess();
+        })
+        .catch((error) => {
+            console.error('Appointment submission failed:', error);
+            showAppointmentSubmissionError(error);
+        })
+        .finally(() => {
+            resetButtonState(bookingBtn);
+        });
+}
+
+// Success message for submit + redirect approach
+function showAppointmentSubmissionWithRedirectSuccess() {
+    // Hide validation errors
+    const validationError = document.getElementById('validationError');
+    if (validationError) {
+        validationError.classList.add('d-none');
+    }
+    
+    // Create success message
+    const successDiv = document.createElement('div');
+    successDiv.className = 'alert alert-success mt-3 fade show';
+    successDiv.innerHTML = `
+        <div class="d-flex align-items-center">
+            <i class="bi bi-check-circle-fill me-3" style="font-size: 1.5rem;"></i>
+            <div>
+                <h5 class="alert-heading mb-1">Request Submitted & Booking Opened!</h5>
+                <p class="mb-2">
+                    <strong>Step 1:</strong> ✅ Your appointment request has been submitted to our system.<br>
+                    <strong>Step 2:</strong> 📅 Our booking calendar should have opened in a new window.
+                </p>
+                <hr class="my-2">
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <button class="btn btn-primary btn-sm w-100" onclick="window.open('${GOOGLE_APPOINTMENTS_CONFIG.BOOKING_URL}', '_blank')">
+                            <i class="bi bi-calendar-plus me-1"></i>Open Booking Again
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="tel:615-719-7883" class="btn btn-outline-primary btn-sm w-100">
+                            <i class="bi bi-telephone me-1"></i>Call Instead
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    const appointmentForm = document.getElementById('appointmentForm');
+    if (appointmentForm) {
+        // Clear the form
+        appointmentForm.reset();
+        
+        // Add success message
+        appointmentForm.appendChild(successDiv);
+        
+        // Remove success message after 20 seconds
+        setTimeout(() => {
+            if (successDiv.parentNode) {
+                successDiv.remove();
+            }
+        }, 20000);
+        
+        // Scroll to success message
+        successDiv.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+        });
+    }
+}
+
+
+
 
 // Enhanced validation error function that forces focus and scrolls
 function showValidationErrorAndFocus(message, inputElement) {
@@ -614,12 +892,12 @@ function addShakeAnimationCSS() {
     }
 }
 
-// Update booking button to use Google Appointments
+// Update booking button to Neltify Form Submission
 function updateBookingButton() {
     const bookingBtn = document.getElementById('squareBookingBtn');
     if (bookingBtn) {
         // Update the onclick function
-        bookingBtn.onclick = validateAndRedirectToGoogleAppointments;
+        bookingBtn.onclick = validateAndSubmitAppointmentToNetlify;
         
         // Update button text
         bookingBtn.innerHTML = '<i class="bi bi-calendar-plus me-2"></i>Schedule Appointment';
@@ -627,15 +905,6 @@ function updateBookingButton() {
         // Update button styling if needed
         bookingBtn.classList.remove('btn-danger');
         bookingBtn.classList.add('btn-primary');
-    }
-    
-    // Update info alert
-    const infoAlert = document.querySelector('#appointment .alert-info');
-    if (infoAlert) {
-        infoAlert.innerHTML = `
-            <i class="bi bi-info-circle-fill me-2"></i>
-            <small><strong>Note:</strong> Clicking "Schedule Appointment" will open our Google Appointments booking page in a new window where you can select your preferred time slot.</small>
-        `;
     }
 }
 
@@ -1745,7 +2014,7 @@ Best regards`;
 // Export functions for global access
 window.scrollToSection = scrollToSection;
 window.showServiceDetails = showServiceDetails;
-window.validateAndRedirectToGoogleAppointments = validateAndRedirectToGoogleAppointments;
+window.validateAndSubmitAppointmentToNetlify = validateAndSubmitAppointmentToNetlify;
 window.validateTimeFormat = validateTimeFormat;
 window.showPatientForm = showPatientForm;
 window.closeForm = closeForm;
