@@ -38,6 +38,19 @@
         </div>
     </nav>
 
+    <!-- Hidden Netlify Form for Patient Information Submission -->
+    <form name="patient-form-submission" netlify netlify-honeypot="bot-field" hidden>
+        <input type="text" name="patient_name" />
+        <input type="text" name="first_name" />
+        <input type="text" name="last_name" />
+        <input type="email" name="email" />
+        <input type="tel" name="phone" />
+        <input type="date" name="dob" />
+        <input type="text" name="form_type" />
+        <input type="text" name="submission_timestamp" />
+        <input type="text" name="submission_method" />
+    </form>
+
     <!-- Patient Forms Section -->
     <section class="py-5 mt-5 bg-light">
         <div class="container">

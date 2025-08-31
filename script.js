@@ -866,9 +866,9 @@ function loadWithIframe() {
     }
 }
 
-// Enhanced submit form function that captures and uploads the filled PDF
+// Enhanced submit form function that emails PDF and submits to Netlify
 function submitForm() {
-    console.log('submitForm() called - attempting to capture and upload filled PDF');
+    console.log('submitForm() called - preparing email and Netlify submission');
     
     // Show loading state
     const submitBtn = document.querySelector('button[onclick="submitForm()"]');
@@ -877,14 +877,14 @@ function submitForm() {
         submitBtn.disabled = true;
     }
     
-    // Try to capture the filled PDF and submit
-    captureAndSubmitPDF()
+    // Collect patient information and submit
+    collectPatientInfoAndSubmit()
         .then((result) => {
-            console.log('PDF capture and submission completed successfully');
+            console.log('Form submission completed successfully');
             showSubmissionSuccess(result);
         })
         .catch(error => {
-            console.error('PDF capture/submission failed:', error);
+            console.error('Form submission failed:', error);
             showSubmissionError(error);
         })
         .finally(() => {
@@ -894,6 +894,350 @@ function submitForm() {
                 submitBtn.disabled = false;
             }
         });
+}
+
+// Collect patient information and handle submissions
+async function collectPatientInfoAndSubmit() {
+    try {
+        console.log('Starting form submission process...');
+        
+        // Get patient information
+        const patientInfo = await promptForPatientInfo();
+        console.log('Patient info collected:', patientInfo.patient_name);
+        
+        // Submit to Netlify form
+        console.log('Submitting patient information to Netlify...');
+        const netlifyResult = await submitToNetlifyForm(patientInfo);
+        
+        // Open email client for PDF submission
+        console.log('Opening email client for PDF form submission...');
+        openEmailForPDFSubmission(patientInfo);
+        
+        return {
+            success: true,
+            netlifySubmitted: netlifyResult.success,
+            emailOpened: true,
+            patientInfo: patientInfo
+        };
+        
+    } catch (error) {
+        console.error('Error in form submission process:', error);
+        throw error;
+    }
+}
+
+// Submit patient information to Netlify Forms
+async function submitToNetlifyForm(patientInfo) {
+    try {
+        console.log('Submitting to Netlify Forms...');
+        
+        // Prepare form data for Netlify
+        const formData = new FormData();
+        formData.append('form-name', 'patient-form-submission');
+        formData.append('patient_name', patientInfo.patient_name);
+        formData.append('first_name', patientInfo.first_name);
+        formData.append('last_name', patientInfo.last_name);
+        formData.append('email', patientInfo.email || '');
+        formData.append('phone', patientInfo.phone || '');
+        formData.append('dob', patientInfo.dob || '');
+        formData.append('form_type', 'Patient Information Form');
+        formData.append('submission_timestamp', new Date().toISOString());
+        formData.append('submission_method', 'Website PDF Form');
+        
+        const response = await fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(formData)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Netlify submission failed: ${response.status}`);
+        }
+        
+        console.log('Successfully submitted to Netlify Forms');
+        return { success: true };
+        
+    } catch (error) {
+        console.error('Netlify submission error:', error);
+        // Don't throw error here - we still want to open email even if Netlify fails
+        return { success: false, error: error.message };
+    }
+}
+
+// Open email client with PDF form submission details
+function openEmailForPDFSubmission(patientInfo) {
+    const email = 'denturesandmore1@yahoo.com';
+    const subject = `Completed Patient Information Form - ${patientInfo.patient_name}`;
+    const body = `Hello Dentures & More Team,
+
+Please find my completed Patient Information Form attached to this email.
+
+Patient Information:
+- Name: ${patientInfo.patient_name}
+- Email: ${patientInfo.email || 'Not provided'}
+- Phone: ${patientInfo.phone || 'Not provided'}
+- Date of Birth: ${patientInfo.dob || 'Not provided'}
+- Form Type: Patient Information Form
+- Completed Date: ${new Date().toLocaleDateString()}
+- Submission Time: ${new Date().toLocaleTimeString()}
+
+Please save this completed form to my patient file. I look forward to my appointment.
+
+Best regards,
+${patientInfo.patient_name}`;
+    
+    // Create mailto link
+    const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    
+    // Open email client
+    window.open(mailtoLink, '_blank');
+    
+    console.log('Email client opened for PDF submission');
+}
+
+// Updated success message function
+function showSubmissionSuccess(result) {
+    const pdfContainer = document.getElementById('pdfFormContainer');
+    if (pdfContainer) {
+        pdfContainer.classList.add('d-none');
+    }
+    
+    const successModal = document.createElement('div');
+    successModal.className = 'modal fade show';
+    successModal.style.display = 'block';
+    successModal.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    successModal.style.zIndex = '9999';
+    successModal.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-check-circle-fill me-2"></i>Form Submission Initiated!
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" onclick="this.closest('.modal').remove(); window.location.reload();"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-envelope-check text-success" style="font-size: 4rem;"></i>
+                        <h6 class="text-success mt-3">Your email client should have opened!</h6>
+                        <p class="text-muted">Patient: <strong>${result.patientInfo?.patient_name || 'Unknown'}</strong></p>
+                    </div>
+                    
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <div class="alert ${result.netlifySubmitted ? 'alert-success' : 'alert-warning'} border-0">
+                                <i class="bi bi-${result.netlifySubmitted ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+                                <strong>Patient Information:</strong> ${result.netlifySubmitted ? 'Submitted successfully' : 'Submission had issues'}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="alert ${result.emailOpened ? 'alert-info' : 'alert-warning'} border-0">
+                                <i class="bi bi-envelope me-2"></i>
+                                <strong>Email Client:</strong> ${result.emailOpened ? 'Opened successfully' : 'Failed to open'}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-primary border-0 mb-4">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Next Steps:</strong>
+                        <ol class="mb-0 mt-2">
+                            <li>Attach your completed PDF form to the email that opened</li>
+                            <li>Send the email to complete your submission</li>
+                            <li>We'll contact you to confirm receipt and schedule your appointment</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="card h-100 border-info">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-envelope text-info mb-2" style="font-size: 2rem;"></i>
+                                    <h6 class="card-title text-info">Didn't Open?</h6>
+                                    <p class="card-text small">Manually send the email</p>
+                                    <button class="btn btn-info btn-sm" onclick="openEmailForPDFSubmission(${JSON.stringify(result.patientInfo).replace(/"/g, '&quot;')}); this.closest('.modal').remove();">
+                                        <i class="bi bi-envelope me-1"></i>Open Email
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card h-100 border-primary">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-download text-primary mb-2" style="font-size: 2rem;"></i>
+                                    <h6 class="card-title text-primary">Download Form</h6>
+                                    <p class="card-text small">Get the PDF to attach</p>
+                                    <button class="btn btn-primary btn-sm" onclick="downloadForm(); this.closest('.modal').remove();">
+                                        <i class="bi bi-download me-1"></i>Download
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card h-100 border-success">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-calendar-plus text-success mb-2" style="font-size: 2rem;"></i>
+                                    <h6 class="card-title text-success">Book Appointment</h6>
+                                    <p class="card-text small">Schedule your visit</p>
+                                    <button class="btn btn-success btn-sm" onclick="this.closest('.modal').remove(); scrollToSection('appointment');">
+                                        <i class="bi bi-calendar me-1"></i>Book Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4 pt-3 border-top">
+                        <p class="text-muted small mb-2">
+                            <i class="bi bi-telephone me-1"></i>
+                            <strong>Need Help?</strong> Call us at <a href="tel:615-719-7883" class="text-decoration-none">615-719-7883</a>
+                        </p>
+                        <p class="text-muted small mb-0">
+                            <i class="bi bi-shield-check me-1"></i>
+                            Your patient information has been securely submitted to our system.
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" onclick="this.closest('.modal').remove(); window.location.reload();">
+                        <i class="bi bi-house me-1"></i>Return to Forms
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(successModal);
+    
+    // Auto-remove modal after 5 minutes
+    setTimeout(() => {
+        if (successModal.parentNode) {
+            successModal.remove();
+        }
+    }, 300000);
+}
+
+// Updated error handling for the new submission method
+function showSubmissionError(error) {
+    const errorModal = document.createElement('div');
+    errorModal.className = 'modal fade show';
+    errorModal.style.display = 'block';
+    errorModal.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    errorModal.style.zIndex = '9999';
+    errorModal.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Submission Issue
+                    </h5>
+                    <button type="button" class="btn-close" onclick="this.closest('.modal').remove()"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="text-center mb-3">
+                        <i class="bi bi-envelope-slash text-warning" style="font-size: 3rem;"></i>
+                    </div>
+                    <p>There was an issue with the automatic submission process. Don't worry - you can still submit your form manually:</p>
+                    
+                    <div class="alert alert-info mb-3">
+                        <small><strong>Technical details:</strong> ${error.message || 'Unknown error occurred during submission'}</small>
+                    </div>
+                    
+                    <h6 class="text-primary mb-3">Manual Submission Options:</h6>
+                    
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="card border-success">
+                                <div class="card-body">
+                                    <h6 class="text-success"><i class="bi bi-envelope me-2"></i>Email Your Completed Form</h6>
+                                    <p class="card-text small mb-2">Manually compose an email with your completed PDF</p>
+                                    <div class="row g-2">
+                                        <div class="col-6">
+                                            <button class="btn btn-success btn-sm w-100" onclick="manualEmailSubmission(); this.closest('.modal').remove();">
+                                                <i class="bi bi-envelope me-1"></i>Open Email
+                                            </button>
+                                        </div>
+                                        <div class="col-6">
+                                            <button class="btn btn-outline-success btn-sm w-100" onclick="copyEmailInfo();">
+                                                <i class="bi bi-clipboard me-1"></i>Copy Info
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <button class="btn btn-primary w-100" onclick="downloadForm(); this.closest('.modal').remove();">
+                                <i class="bi bi-download me-1"></i>Download Form
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-info w-100" onclick="printForm(); this.closest('.modal').remove();">
+                                <i class="bi bi-printer me-1"></i>Print Form
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-primary mt-3">
+                        <i class="bi bi-telephone me-2"></i>
+                        <strong>Or call us directly:</strong> <a href="tel:615-719-7883" class="text-decoration-none">615-719-7883</a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" onclick="this.closest('.modal').remove();">
+                        <i class="bi bi-arrow-left me-1"></i>Try Again
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(errorModal);
+}
+
+// Manual email submission helper
+function manualEmailSubmission() {
+    const email = 'denturesandmore1@yahoo.com';
+    const subject = 'Completed Patient Information Form';
+    const body = `Hello Dentures & More Team,
+
+    Please find my completed Patient Information Form attached to this email.
+
+    Form Details:
+    - Form Type: Patient Information Form
+    - Completed Date: ${new Date().toLocaleDateString()}
+    - Submission Time: ${new Date().toLocaleTimeString()}
+
+    Please save this completed form to my patient file. I look forward to my appointment.
+
+    Best regards`;
+    
+    const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.open(mailtoLink, '_blank');
+}
+
+// Copy email information to clipboard
+function copyEmailInfo() {
+    const emailInfo = `Email: denturesandmore1@yahoo.com
+    Subject: Completed Patient Information Form
+
+    Instructions: Attach your completed PDF form and send the email.`;
+    
+    navigator.clipboard.writeText(emailInfo).then(() => {
+        alert('Email information copied to clipboard!');
+    }).catch(() => {
+        // Fallback for browsers that don't support clipboard API
+        const textArea = document.createElement('textarea');
+        textArea.value = emailInfo;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        alert('Email information copied to clipboard!');
+    });
 }
 
 // Capture filled PDF and submit to Google Drive
