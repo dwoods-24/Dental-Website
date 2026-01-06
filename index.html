@@ -63,7 +63,143 @@
 
         gtag('config', 'G-7P1SQV3EWB');
     </script>
+    <!-- AOS (Animate On Scroll) CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Local Business Schema Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Dentist",
+      "name": "Dentures & More",
+      "image": "https://denturesandmore.com/img/Dentures&More_Logo.png",
+      "description": "Expert denture services and dental implants in Hermitage, TN. Serving Nashville area since 1990.",
+      "@id": "https://denturesandmore.com",
+      "url": "https://denturesandmore.com",
+      "telephone": "615-719-7883",
+      "email": "denturesandmore1@yahoo.com",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "3441 Lebanon Pike Suite 105",
+        "addressLocality": "Hermitage",
+        "addressRegion": "TN",
+        "postalCode": "37076",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 36.1895818,
+        "longitude": -86.6245107
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday"],
+          "opens": "09:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Friday", "Saturday"],
+          "opens": "09:00",
+          "closes": "14:00"
+        }
+      ],
+      "sameAs": [
+        "https://www.facebook.com/people/Dentures-More/61579188126912/",
+        "https://www.instagram.com/denturesandmore/",
+        "https://yelp.com/biz/denturesandmore-nashville"
+      ],
+      "paymentAccepted": "Cash, Credit Card, Insurance",
+      "areaServed": [
+        {
+          "@type": "City",
+          "name": "Hermitage"
+        },
+        {
+          "@type": "City",
+          "name": "Nashville"
+        },
+        {
+          "@type": "City",
+          "name": "Donelson"
+        },
+        {
+          "@type": "City",
+          "name": "Old Hickory"
+        },
+        {
+          "@type": "City",
+          "name": "Mount Juliet"
+        },
+        {
+          "@type": "City",
+          "name": "Lebanon"
+        }
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Dental Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Complete Dentures"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Partial Dentures"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Dental Implants"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Denture Repairs"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Denture Relines"
+            }
+          }
+        ]
+      }
+    }
+    </script>
     
+    <!-- Open Graph for Social Media -->
+    <meta property="og:title" content="Dentures & More - Expert Denture Services in Hermitage, TN">
+    <meta property="og:description" content="Affordable dentures, dental implants, and restorative dentistry. Serving Nashville area since 1990. Call 615-719-7883 for a free consultation.">
+    <meta property="og:image" content="https://denturesandmore.com/img/Dentures&More_Logo.png">
+    <meta property="og:url" content="https://denturesandmore.com">
+    <meta property="og:type" content="business.business">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Dentures & More - Expert Denture Services in Hermitage, TN">
+    <meta name="twitter:description" content="Affordable dentures, dental implants, and restorative dentistry. Serving Nashville area since 1990.">
+    <meta name="twitter:image" content="https://denturesandmore.com/img/Dentures&More_Logo.png">
+    
+    <!-- Geo Tags -->
+    <meta name="geo.region" content="US-TN">
+    <meta name="geo.placename" content="Hermitage">
+    <meta name="geo.position" content="36.1895818;-86.6245107">
+    <meta name="ICBM" content="36.1895818, -86.6245107">
     
 </head>
 <body>
@@ -528,5 +664,16 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
     <script src="/script.js"></script>
+    <!-- AOS (Animate On Scroll) JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,  // Animation duration in milliseconds
+            offset: 100,     // Offset from the original trigger point
+            easing: 'ease-in-out', // Easing function
+            once: true,      // Whether animation should happen only once
+            mirror: false    // Whether elements should animate out while scrolling past them
+        });
+    </script>
 </body>
 </html>
