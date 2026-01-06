@@ -1985,6 +1985,161 @@ function printForm() {
     }
 }
 
+/*Email PDF form using SMTP.js
+function emailForm() {
+    console.log('emailForm() called');
+    
+    // Prompt for user information
+    const userEmail = prompt('Please enter your email address:');
+    if (!userEmail || !userEmail.includes('@')) {
+        alert('Please enter a valid email address.');
+        return;
+    }
+    
+    const userName = prompt('Please enter your full name:');
+    if (!userName) {
+        alert('Please enter your name.');
+        return;
+    }
+    
+    // Show loading indicator
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'alert alert-info text-center';
+    loadingDiv.style.position = 'fixed';
+    loadingDiv.style.top = '50%';
+    loadingDiv.style.left = '50%';
+    loadingDiv.style.transform = 'translate(-50%, -50%)';
+    loadingDiv.style.zIndex = '10000';
+    loadingDiv.innerHTML = '<div class="spinner-border me-2"></div>Sending email...';
+    document.body.appendChild(loadingDiv);
+    
+    // Send email using SMTP.js
+    Email.send({
+        SecureToken: "YOUR_SECURE_TOKEN_HERE", // Replace with your actual secure token
+        To: 'denturesandmore1@yahoo.com',
+        From: userEmail,
+        Subject: 'Patient Form Notification - ' + userName,
+        Body: `
+            <html>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+                    <h2 style="color: #2196F3; border-bottom: 2px solid #2196F3; padding-bottom: 10px;">
+                        Patient Information Form Notification
+                    </h2>
+                    
+                    <p>Hello Dentures & More Team,</p>
+                    
+                    <p>A patient has indicated they have completed the Patient Information Form.</p>
+                    
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                        <h3 style="color: #2196F3; margin-top: 0;">Patient Details:</h3>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td style="padding: 5px; font-weight: bold;">Name:</td>
+                                <td style="padding: 5px;">${userName}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px; font-weight: bold;">Email:</td>
+                                <td style="padding: 5px;">${userEmail}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px; font-weight: bold;">Form Type:</td>
+                                <td style="padding: 5px;">Patient Information Form</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px; font-weight: bold;">Submission Date:</td>
+                                <td style="padding: 5px;">${new Date().toLocaleDateString()}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px; font-weight: bold;">Submission Time:</td>
+                                <td style="padding: 5px;">${new Date().toLocaleTimeString()}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div style="background: #fff3cd; padding: 15px; border-radius: 5px; border-left: 4px solid #ffc107; margin: 20px 0;">
+                        <p style="margin: 0;"><strong>⚠️ Note:</strong> The patient should download and email the completed PDF form separately, or print and bring it to their appointment.</p>
+                    </div>
+                    
+                    <p>Please contact the patient to confirm receipt and schedule their appointment.</p>
+                    
+                    <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+                    
+                    <p style="color: #666; font-size: 12px;">
+                        This is an automated message from the Dentures & More website forms system.
+                    </p>
+                </div>
+            </body>
+            </html>
+        `
+    }).then(
+        message => {
+            document.body.removeChild(loadingDiv);
+            
+            // Show success message
+            const successDiv = document.createElement('div');
+            successDiv.className = 'alert alert-success';
+            successDiv.style.position = 'fixed';
+            successDiv.style.top = '50%';
+            successDiv.style.left = '50%';
+            successDiv.style.transform = 'translate(-50%, -50%)';
+            successDiv.style.zIndex = '10000';
+            successDiv.style.maxWidth = '500px';
+            successDiv.innerHTML = `
+                <h5><i class="bi bi-check-circle-fill me-2"></i>Notification Sent!</h5>
+                <p>Our office has been notified that you've completed the form.</p>
+                <p><strong>Next Steps:</strong></p>
+                <ul class="mb-3">
+                    <li>Download your completed form using the "Download" button</li>
+                    <li>Email it to denturesandmore1@yahoo.com or</li>
+                    <li>Print and bring it to your appointment</li>
+                </ul>
+                <button class="btn btn-success" onclick="this.parentElement.remove();">Close</button>
+            `;
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                if (successDiv.parentElement) {
+                    successDiv.remove();
+                }
+            }, 10000);
+            
+            console.log('Email sent successfully:', message);
+        }
+    ).catch(
+        error => {
+            document.body.removeChild(loadingDiv);
+            
+            // Show error with fallback options
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'alert alert-warning';
+            errorDiv.style.position = 'fixed';
+            errorDiv.style.top = '50%';
+            errorDiv.style.left = '50%';
+            errorDiv.style.transform = 'translate(-50%, -50%)';
+            errorDiv.style.zIndex = '10000';
+            errorDiv.style.maxWidth = '500px';
+            errorDiv.innerHTML = `
+                <h5><i class="bi bi-exclamation-triangle-fill me-2"></i>Email Service Unavailable</h5>
+                <p>We couldn't send the notification automatically. Please use one of these alternatives:</p>
+                <div class="d-grid gap-2">
+                    <a href="mailto:denturesandmore1@yahoo.com?subject=Completed%20Patient%20Form%20-%20${encodeURIComponent(userName)}&body=Name:%20${encodeURIComponent(userName)}%0AEmail:%20${encodeURIComponent(userEmail)}%0A%0AI%20have%20completed%20the%20patient%20information%20form.%20Please%20find%20it%20attached." 
+                       class="btn btn-primary">
+                        <i class="bi bi-envelope me-2"></i>Open Email Client
+                    </a>
+                    <a href="tel:615-719-7883" class="btn btn-outline-primary">
+                        <i class="bi bi-telephone me-2"></i>Call: 615-719-7883
+                    </a>
+                    <button class="btn btn-secondary" onclick="this.parentElement.parentElement.remove();">Close</button>
+                </div>
+            `;
+            document.body.appendChild(errorDiv);
+            
+            console.error('Email sending failed:', error);
+        }
+    );
+}*/
+
 // Email PDF form
 function emailForm() {
     console.log('emailForm() called');
