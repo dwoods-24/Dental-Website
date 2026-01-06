@@ -8,13 +8,13 @@
 
     
     <!-- Browser Tab Icon -->
-    <link rel="icon" type="image/png" href="/img/Dentures&More_Pic.png">
+    <link rel="icon" type="image/png" href="/Dental-Website/img/Dentures&More_Pic.png">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/Dental-Website/styles.css">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7P1SQV3EWB"></script>
     <script>
@@ -26,47 +26,109 @@
     </script>
     
     <style>
-        /* About page specific styles */
+        /* Modern About Page Styles */
+        :root {
+            --primary-color: #2196F3;
+            --secondary-color: #8BC34A;
+            --dark-blue: #1565C0;
+            --light-bg: #f8f9fa;
+            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
         .about-hero {
-            background: linear-gradient(135deg, #8BC34A 0%, #2196F3 100%);
-            padding: 120px 0 60px;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            padding: 140px 0 80px;
             color: white;
             margin-top: 76px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .about-hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .about-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .about-hero p {
+            font-size: 1.3rem;
+            font-weight: 300;
         }
         
         .doctor-card {
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 24px;
+            box-shadow: var(--shadow-lg);
             overflow: hidden;
-            transition: transform 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
         
         .doctor-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
         }
         
         .doctor-image {
-            width: 200px;
-            height: 200px;
+            width: 220px;
+            height: 220px;
             border-radius: 50%;
             object-fit: cover;
-            border: 5px solid #f8f9fa;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 6px solid #fff;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+        
+        .doctor-card:hover .doctor-image {
+            transform: scale(1.05);
         }
         
         .office-feature {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
             height: 100%;
-            border-left: 4px solid var(--bs-primary, #0d6efd);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .office-feature:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .office-feature i {
+            transition: transform 0.3s ease;
+        }
+        
+        .office-feature:hover i {
+            transform: scale(1.1) rotate(5deg);
         }
         
         .timeline-item {
             position: relative;
-            padding-left: 3rem;
-            margin-bottom: 2rem;
+            padding-left: 3.5rem;
+            margin-bottom: 2.5rem;
         }
         
         .timeline-item::before {
@@ -74,22 +136,27 @@
             position: absolute;
             left: 0;
             top: 0;
-            width: 20px;
-            height: 20px;
-            background: var(--bs-primary, #0d6efd);
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-blue));
             border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 0 0 3px var(--bs-primary, #0d6efd);
+            border: 4px solid white;
+            box-shadow: 0 0 0 4px var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-item:hover::before {
+            transform: scale(1.2);
         }
         
         .timeline-item::after {
             content: '';
             position: absolute;
-            left: 9px;
-            top: 20px;
-            width: 2px;
+            left: 11px;
+            top: 24px;
+            width: 3px;
             height: calc(100% + 1rem);
-            background: #e2e8f0;
+            background: linear-gradient(to bottom, var(--primary-color), transparent);
         }
         
         .timeline-item:last-child::after {
@@ -97,31 +164,117 @@
         }
         
         .stats-section {
-            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 4rem 0;
         }
         
         .stat-card {
             text-align: center;
-            padding: 2rem;
+            padding: 2.5rem 2rem;
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-color);
         }
         
         .stat-number {
-            font-size: 3rem;
-            font-weight: bold;
-            color: var(--bs-primary, #0d6efd);
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
+            border-radius: 2px;
+        }
+        
+        .story-image {
+            border-radius: 20px;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease;
+        }
+        
+        .story-image:hover {
+            transform: scale(1.02);
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-blue) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        
+        .btn-modern {
+            padding: 1rem 2.5rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            border-width: 2px;
+        }
+        
+        .btn-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .stat-number {
+                font-size: 2.5rem;
+            }
+            
+            .doctor-image {
+                width: 180px;
+                height: 180px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation (same as main page) -->
+    <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="navbar">
         <div class="container">
             <a class="navbar-brand fw-bold" href="/Dental-Website/index.html">
-                <span class="navbar-logo"><img src="/Dental-Website/img/logo_alt.jpg" alt="Dentures&More" class="navbar-logo"></span>
+                <span class="navbar-logo"><img src="/Dental-Website/img/Dentures&More_Logo.jpg" alt="Dentures&More" class="navbar-logo"></span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -132,16 +285,16 @@
                         <a class="nav-link" href="/Dental-Website/index.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/#services">Services</a>
+                        <a class="nav-link" href="/Dental-Website/index.html#services">Services</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="/about.html">About</a>
+                        <a class="nav-link active" href="/Dental-Website/about/index.html">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/#appointment">Appointment</a>
+                        <a class="nav-link" href="/Dental-Website/index.html#appointment">Appointment</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/#contact">Contact</a>
+                        <a class="nav-link" href="/Dental-Website/index.html#contact">Contact</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/Dental-Website/forms/index.html">Patient Forms</a>
@@ -153,7 +306,7 @@
 
     <!-- About Hero Section -->
     <section class="about-hero">
-        <div class="container">
+        <div class="container about-hero-content">
             <div class="row justify-content-center text-center">
                 <div class="col-lg-8">
                     <h1 class="display-4 fw-bold mb-4">About Dentures & More</h1>
@@ -164,31 +317,31 @@
     </section>
 
     <!-- Stats Section -->
-    <section class="stats-section py-5">
+    <section class="stats-section">
         <div class="container">
             <div class="row g-4">
                 <div class="col-md-3 col-sm-6">
                     <div class="stat-card">
                         <span class="stat-number">30+</span>
-                        <h5 class="text-muted">Years of Experience</h5>
+                        <h5 class="text-muted mb-0">Years of Experience</h5>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="stat-card">
                         <span class="stat-number">5000+</span>
-                        <h5 class="text-muted">Happy Patients</h5>
+                        <h5 class="text-muted mb-0">Happy Patients</h5>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="stat-card">
                         <span class="stat-number">100%</span>
-                        <h5 class="text-muted">Patient Satisfaction</h5>
+                        <h5 class="text-muted mb-0">Patient Satisfaction</h5>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="stat-card">
                         <span class="stat-number">6</span>
-                        <h5 class="text-muted">Days Per Week</h5>
+                        <h5 class="text-muted mb-0">Days Per Week</h5>
                     </div>
                 </div>
             </div>
@@ -200,29 +353,29 @@
         <div class="container">
             <div class="row justify-content-center mb-5">
                 <div class="col-lg-8 text-center">
-                    <h2 class="display-5 fw-bold text-primary mb-4">Meet Our Team</h2>
-                    <p class="lead">Our experienced and caring team is dedicated to providing you with the highest quality dental care</p>
+                    <h2 class="display-5 fw-bold text-primary section-title">Meet Our Team</h2>
+                    <p class="lead mt-4">Our experienced and caring team is dedicated to providing you with the highest quality dental care</p>
                 </div>
             </div>
             
             <div class="row justify-content-center">
-                <div class="col-lg-8">
+                <div class="col-lg-10">
                     <div class="doctor-card p-5">
                         <div class="row align-items-center">
                             <div class="col-md-4 text-center mb-4 mb-md-0">
-                                <img src="/Dental-Website/img/headshot.jpg" alt="Dr. [Doctor Name]" class="doctor-image">
+                                <img src="/Dental-Website/img/headshot.jpg" alt="Dr. Donald Woods" class="doctor-image">
                             </div>
-                            <div class="col-sm-8">
-                                <h3 class="text-primary mb-3">Dr.Donald Woods</h3>
-                                <h5 class="text-muted mb-3">Lead Dentist & Practice Owner</h5>
-                                <p class="mb-3">
-                                    With over 30 years of experience in restorative dentistry, Dr.Donald Woods has dedicated his career to helping patients achieve beautiful, functional smiles. Specializing in dentures, dental implants, and comprehensive oral care.
+                            <div class="col-md-8">
+                                <h3 class="text-primary mb-2">Dr. Donald Woods</h3>
+                                <h5 class="text-muted mb-4">Lead Dentist & Practice Owner</h5>
+                                <p class="mb-4">
+                                    With over 30 years of experience in restorative dentistry, Dr. Donald Woods has dedicated his career to helping patients achieve beautiful, functional smiles. Specializing in dentures, dental implants, and comprehensive oral care.
                                 </p>
                                 <div class="row">
-                                    <div class="col-sm-8">
-                                        <h6 class="text-primary">Education:</h6>
-                                        <ul class="list-unstyled small">
-                                            <li>• DDS from Meharry Medical College</li>
+                                    <div class="col-12">
+                                        <h6 class="text-primary fw-bold mb-3">Education:</h6>
+                                        <ul class="list-unstyled">
+                                            <li class="mb-2"><i class="bi bi-mortarboard-fill text-primary me-2"></i>DDS from Meharry Medical College</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -237,7 +390,7 @@
     <!-- Our Story Section -->
     <section class="py-5 bg-light">
         <div class="container">
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col-lg-6 mb-4 mb-lg-0">
                     <h2 class="display-6 fw-bold text-primary mb-4">Our Story</h2>
                     <p class="lead mb-4">
@@ -245,29 +398,29 @@
                     </p>
                     
                     <div class="timeline-item">
-                        <h5 class="text-primary">1990</h5>
-                        <p>Practice established in Hermitage, TN with a focus on affordable, quality denture services.</p>
+                        <h5 class="text-primary fw-bold">1990</h5>
+                        <p class="mb-0">Practice established in Hermitage, TN with a focus on affordable, quality denture services.</p>
                     </div>
                     
                     <div class="timeline-item">
-                        <h5 class="text-primary">2000</h5>
-                        <p>Expanded services to include dental implants and advanced restorative procedures.</p>
+                        <h5 class="text-primary fw-bold">2000</h5>
+                        <p class="mb-0">Expanded services to include dental implants and advanced restorative procedures.</p>
                     </div>
                     
                     <div class="timeline-item">
-                        <h5 class="text-primary">2010</h5>
-                        <p>Upgraded to state-of-the-art digital technology for improved patient care.</p>
+                        <h5 class="text-primary fw-bold">2010</h5>
+                        <p class="mb-0">Upgraded to state-of-the-art digital technology for improved patient care.</p>
                     </div>
                     
                     <div class="timeline-item">
-                        <h5 class="text-primary">2020</h5>
-                        <p>Implemented enhanced safety protocols and modern patient management systems.</p>
+                        <h5 class="text-primary fw-bold">2020</h5>
+                        <p class="mb-0">Implemented enhanced safety protocols and modern patient management systems.</p>
                     </div>
                 </div>
                 
                 <div class="col-lg-6">
-                    <img src="/img/office-exterior.jpg" alt="Dentures & More Office" class="img-fluid rounded-3 shadow mb-4">
-                    <img src="/img/office-interior.jpg" alt="Modern Dental Office Interior" class="img-fluid rounded-3 shadow">
+                    <img src="/Dental-Website/img/office-exterior.jpg" alt="Dentures & More Office" class="img-fluid story-image mb-4">
+                    <img src="/Dental-Website/img/office-interior.jpg" alt="Modern Dental Office Interior" class="img-fluid story-image">
                 </div>
             </div>
         </div>
@@ -278,56 +431,56 @@
         <div class="container">
             <div class="row mb-5">
                 <div class="col-12 text-center">
-                    <h2 class="display-6 fw-bold text-primary">Why Choose Dentures & More?</h2>
+                    <h2 class="display-6 fw-bold text-primary section-title">Why Choose Dentures & More?</h2>
                 </div>
             </div>
             
-            <div class="row g-4">
+            <div class="row g-4 mt-4">
                 <div class="col-lg-4 col-md-6">
                     <div class="office-feature">
-                        <i class="bi bi-award-fill fs-1 text-primary mb-3"></i>
+                        <i class="bi bi-award-fill fs-1 text-primary mb-3 d-block"></i>
                         <h4 class="text-primary mb-3">30+ Years Experience</h4>
-                        <p>Three decades of trusted dental care in the Nashville area, with thousands of satisfied patients.</p>
+                        <p class="mb-0">Three decades of trusted dental care in the Nashville area, with thousands of satisfied patients.</p>
                     </div>
                 </div>
                 
                 <div class="col-lg-4 col-md-6">
                     <div class="office-feature">
-                        <i class="bi bi-cpu-fill fs-1 text-primary mb-3"></i>
+                        <i class="bi bi-cpu-fill fs-1 text-primary mb-3 d-block"></i>
                         <h4 class="text-primary mb-3">Advanced Technology</h4>
-                        <p>State-of-the-art equipment and modern techniques for precise, comfortable treatment.</p>
+                        <p class="mb-0">State-of-the-art equipment and modern techniques for precise, comfortable treatment.</p>
                     </div>
                 </div>
                 
                 <div class="col-lg-4 col-md-6">
                     <div class="office-feature">
-                        <i class="bi bi-heart-fill fs-1 text-primary mb-3"></i>
+                        <i class="bi bi-heart-fill fs-1 text-primary mb-3 d-block"></i>
                         <h4 class="text-primary mb-3">Compassionate Care</h4>
-                        <p>We understand dental anxiety and prioritize your comfort throughout every visit.</p>
+                        <p class="mb-0">We understand dental anxiety and prioritize your comfort throughout every visit.</p>
                     </div>
                 </div>
                 
                 <div class="col-lg-4 col-md-6">
                     <div class="office-feature">
-                        <i class="bi bi-wallet-fill fs-1 text-primary mb-3"></i>
+                        <i class="bi bi-wallet-fill fs-1 text-primary mb-3 d-block"></i>
                         <h4 class="text-primary mb-3">Affordable Options</h4>
-                        <p>Flexible payment plans and insurance accepted to make quality care accessible.</p>
+                        <p class="mb-0">Flexible payment plans and insurance accepted to make quality care accessible.</p>
                     </div>
                 </div>
                 
                 <div class="col-lg-4 col-md-6">
                     <div class="office-feature">
-                        <i class="bi bi-clock-fill fs-1 text-primary mb-3"></i>
+                        <i class="bi bi-clock-fill fs-1 text-primary mb-3 d-block"></i>
                         <h4 class="text-primary mb-3">Convenient Hours</h4>
-                        <p>Extended hours Monday through Saturday to accommodate your busy schedule.</p>
+                        <p class="mb-0">Extended hours Monday through Saturday to accommodate your busy schedule.</p>
                     </div>
                 </div>
                 
                 <div class="col-lg-4 col-md-6">
                     <div class="office-feature">
-                        <i class="bi bi-geo-alt-fill fs-1 text-primary mb-3"></i>
+                        <i class="bi bi-geo-alt-fill fs-1 text-primary mb-3 d-block"></i>
                         <h4 class="text-primary mb-3">Prime Location</h4>
-                        <p>Easily accessible location in Hermitage with ample parking and public transportation.</p>
+                        <p class="mb-0">Easily accessible location in Hermitage with ample parking and public transportation.</p>
                     </div>
                 </div>
             </div>
@@ -335,17 +488,17 @@
     </section>
 
     <!-- Call to Action -->
-    <section class="py-5 bg-primary text-white">
-        <div class="container">
+    <section class="py-5 text-white cta-section">
+        <div class="container position-relative" style="z-index: 1;">
             <div class="row justify-content-center text-center">
                 <div class="col-lg-8">
                     <h2 class="display-6 fw-bold mb-4">Ready to Start Your Smile Journey?</h2>
                     <p class="lead mb-4">Experience the difference that personalized, compassionate dental care can make.</p>
                     <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
-                        <a href="https://calendar.app.google/ou5iQJjVLUCM3adB7" class="btn btn-light btn-lg rounded-pill px-4">
+                        <a href="https://calendar.app.google/ou5iQJjVLUCM3adB7" class="btn btn-light btn-lg rounded-pill px-4 btn-modern">
                             <i class="bi bi-calendar-plus me-2"></i>Schedule Appointment
                         </a>
-                        <a href="tel:615-719-7883" class="btn btn-outline-light btn-lg rounded-pill px-4">
+                        <a href="tel:615-719-7883" class="btn btn-outline-light btn-lg rounded-pill px-4 btn-modern">
                             <i class="bi bi-telephone me-2"></i>Call Now
                         </a>
                     </div>
@@ -358,10 +511,9 @@
     <footer id="contact" class="bg-dark text-white py-5">
         <div class="container">
             <div class="row">
-                <!-- OR add this to your footer -->
                 <div class="col-lg-3 mb-4 mb-lg-0">
                     <h3 class="h5 text-primary mb-3">Patient Resources</h3>
-                    <p><a href="/forms/" class="text-white text-decoration-none">
+                    <p><a href="/Dental-Website/forms/index.html" class="text-white text-decoration-none">
                         <i class="bi bi-file-earmark-text me-2"></i>Online Forms
                     </a></p>
                 </div>
@@ -373,23 +525,22 @@
                 </div>
                 <div class="col-lg-3 mb-4 mb-lg-0">
                     <h3 class="h5 text-primary mb-3">Office Hours</h3>
-                    <p>Monday - Thursday: 9:00 AM - 5:00 PM<br>Friday: 9:00 AM - 2:00 PM<br>Saturday: 9:00 AM - 2:00 PM<br>Sunday: Closed</Sunday:Closed></p>
+                    <p>Monday - Thursday: 9:00 AM - 5:00 PM<br>Friday: 9:00 AM - 2:00 PM<br>Saturday: 9:00 AM - 2:00 PM<br>Sunday: Closed</p>
                 </div>
                 <div class="col-lg-3 mb-4 mb-lg-0">
                     <h3 class="h5 text-primary mb-3">Follow Us</h3>
                     <p>Stay connected for oral health tips and updates</p>
                     <div class="d-flex gap-3">
-                        <a href="https://www.facebook.com/people/Dentures-More/61579188126912/" class="copyright-link"><i class="bi bi-facebook fs-4"></i></a>
-                        <a href="https://www.instagram.com/denturesandmore/" class="copyright-link" ><i class="bi bi-instagram fs-4"></i></a>
-                        <i class="bi bi-twitter fs-4"></i>
+                        <a href="https://www.facebook.com/people/Dentures-More/61579188126912/" class="text-white"><i class="bi bi-facebook fs-4"></i></a>
+                        <a href="https://www.instagram.com/denturesandmore/" class="text-white"><i class="bi bi-instagram fs-4"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-twitter fs-4"></i></a>
                     </div>
                 </div>
-                <br>
-                <br>
-                <br>
-                <div class="col-lg-12">
+            </div>
+            <div class="row mt-5">
+                <div class="col-12">
                     <h3 class="h5 text-primary mb-3">Find Us</h3>
-                    <div class="map-container justify-content-center text-center">
+                    <div class="map-container text-center">
                         <iframe 
                             src="https://www.google.com/maps/embed?pb=!1m23!1m12!1m3!1d103041.74769023243!2d-86.70691177997449!3d36.18955356336663!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m8!3e6!4m0!4m5!1s0x88646b056e842ff1%3A0x5c9489d81af99a9b!2s3441%20Lebanon%20Pike%20%23105%2C%20Hermitage%2C%20TN%2037076!3m2!1d36.1895818!2d-86.6245107!5e0!3m2!1sen!2sus!4v1754347783976!5m2!1sen!2sus"
                             width="80%" 
@@ -401,27 +552,26 @@
                             title="Dentures & More Location">
                         </iframe>
                     </div>
-                    <div class="text-center mt-2">
+                    <div class="text-center mt-3">
                         <a href="https://www.google.com/maps/dir//3441+Lebanon+Pike+%23105,+Hermitage,+TN+37076" 
                            target="_blank" 
                            rel="noopener noreferrer"
                            class="btn btn-outline-light btn-sm rounded-pill">
-                            <i class="bi bi-compass-fill me-1"></i>Directions
+                            <i class="bi bi-compass-fill me-1"></i>Get Directions
                         </a>
                     </div>
                 </div>
             </div>
             <hr class="my-4">
             <div class="text-center">
-                <p class="mb-0">&copy; 2025 <a href="https://yelp.com/biz/denturesandmore-nashville" class="copyright-link">Dentures and More</a>. All rights reserved.</p>
+                <p class="mb-0">&copy; 2025 <a href="https://yelp.com/biz/denturesandmore-nashville" class="text-white text-decoration-none">Dentures and More</a>. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
-    <script src="/script.js"></script>
+    <script src="/Dental-Website/script.js"></script>
 </body>
 </html>
