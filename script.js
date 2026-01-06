@@ -53,10 +53,11 @@ function setupNavigationHandlers() {
     
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
-            e.preventDefault();
             const href = this.getAttribute('href');
             
+            // Handle hash links (same page sections)
             if (href && href.startsWith('#')) {
+                e.preventDefault();
                 const targetId = href.substring(1);
                 scrollToSection(targetId);
                 
@@ -67,6 +68,19 @@ function setupNavigationHandlers() {
                     bsCollapse.hide();
                 }
             }
+            // Handle links with hash after page (e.g., /index.html#services)
+            else if (href && href.includes('#') && href.split('#')[0] === window.location.pathname) {
+                e.preventDefault();
+                const targetId = href.split('#')[1];
+                scrollToSection(targetId);
+                
+                const navbarCollapse = document.getElementById('navbarNav');
+                if (navbarCollapse.classList.contains('show')) {
+                    const bsCollapse = new bootstrap.Collapse(navbarCollapse);
+                    bsCollapse.hide();
+                }
+            }
+            // All other links work normally - no preventDefault!
         });
     });
 }
