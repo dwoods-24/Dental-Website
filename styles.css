@@ -37,8 +37,8 @@ body {
 
 .tooth-icon {
     display:inline-flexbox;
-    width:120px;
-    height:150px;
+    width:920px; /*120px*/
+    height:950px;/*150px*/
     animation: wiggle 2s ease-in-out infinite;
 }
 
