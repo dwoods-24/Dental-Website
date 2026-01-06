@@ -142,7 +142,7 @@ function setupServiceDetails() {
         'Essential Smile Package': `
             <div class="service-detail-content">
                 <div class="price-badge mb-3">
-                    <span class="badge bg-primary fs-6">Starting at $470 per arch</span>
+                    <span class="badge bg-primary fs-6">Starting at $475 per arch</span>
                 </div>
                 
                 <div class="service-features">
