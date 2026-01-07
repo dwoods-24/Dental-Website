@@ -255,13 +255,13 @@ function setupServiceDetails() {
                 
                 <div class="service-features">
                     <h6 class="text-primary mb-2> Description </h6> 
-                    <p class="mb-3">Our acrylic partial dentures offer the fastest turnaround time, frequently available the same day you visit us.</p>
+                    <p class="mb-3">Our all acrylic partial dentures offer the fastest turnaround time, frequently available the same day you visit us.</p>
                     
                     <h6 class="text-primary mb-2"><i class="bi bi-gear-fill me-2"></i>Fit & Function</h6>
                     <p class="mb-3">This classic design uses discreet metal clasps to stay firmly in place. While they utilize a sturdy metal clasp for security and may feel slightly more substantial than other designs, they are carefully crafted to provide a seamless, natural-looking smile.</p>
                     
                     <h6 class="text-primary mb-2"><i class="bi bi-tools me-2"></i>Materials</h6>
-                    <p class="mb-3">Acrylic Partial Dentures</p>
+                    <p class="mb-3">All Acrylic Partial Dentures</p>
                     
                     <h6 class="text-primary mb-2"><i class="bi bi-shield-check me-2"></i>Warranty</h6>
                     <p class="mb-3">6 months against teeth popping out and breakage</p>
@@ -309,7 +309,7 @@ function setupServiceDetails() {
                 
                 <div class="service-features">
                     <h6 class="text-primary mb-2> Description </h6> 
-                    <p class="mb-3">A combo flexible partial denture is a removable dental prosthesis that combines the strength of a metal framework with the comfort and esthetics of a flexible partial denture material.</p>
+                    <p class="mb-3">A Combo Flexible partial denture is a removable dental prosthesis that combines the strength of a metal framework with the comfort and esthetics of a flexible partial denture material.</p>
                     
                     <h6 class="text-primary mb-2"><i class="bi bi-gear-fill me-2"></i>Fit & Function</h6>
                     <p class="mb-3">This hybrid design offers an ideal balance of strength, comfort, and esthetics.  Combo flexible partial dentures are removable, easy to maintain, and designed to provide a secure, comfortable fit while restoring function and a natural smile. </p>
@@ -350,7 +350,7 @@ function setupServiceDetails() {
                     
                     <div class="ideal-for-section">
                         <h6 class="text-success mb-2"><i class="bi bi-people-fill me-2"></i>Ideal For</h6>
-                        <p class="mb-0 fst-italic"> patients who find traditional metal or acrylic options irritating. </p>
+                        <p class="mb-0 fst-italic"> Patients who find traditional metal or acrylic options irritating. </p>
                     </div>
                 </div>
             </div>
