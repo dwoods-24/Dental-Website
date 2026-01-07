@@ -267,6 +267,73 @@
                 height: 180px;
             }
         }
+
+        /*Stats section Styling*/
+        /* Modern Rating Badge */
+        .rating-card {
+            background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+        }
+
+        .rating-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.2);
+        }
+
+        .stars-wrapper {
+            display: flex;
+            gap: 3px;
+        }
+
+        .stars-wrapper i {
+            font-size: 1.5rem;
+            color: #FFC107;
+            text-shadow: 0 2px 4px rgba(255, 193, 7, 0.3);
+        }
+
+        .rating-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .rating-number {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFC107, #FF9800);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .rating-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .rating-card:hover .stars-wrapper i {
+            animation: starBounce 0.6s ease;
+        }
+
+        @keyframes starBounce {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-8px) rotate(-5deg);
+            }
+            75% {
+                transform: translateY(-8px) rotate(5deg);
+            }
+        }
     </style>
 </head>
 <body>
@@ -318,27 +385,38 @@
 
     <!-- Stats Section -->
     <section class="stats-section">
-        <div class="container ">
+        <div class="container">
             <div class="row g-4 justify-content-center">
-                <div class="col-md-6 col-sm-6 justify-content-center" data-aos="flip-left" data-aos-delay="0">
-                    <div class="stat-card justify-content-center">
+                <div class="col-md-4" data-aos="flip-left" data-aos-delay="0">
+                    <div class="stat-card">
                         <span class="stat-number">30+</span>
                         <h5 class="text-muted mb-0">Years of Experience</h5>
                     </div>
                 </div>
-                <div class="col-md-6 col-sm-6 justify-content-center">
-                    <div class="stat-card justify-content-center" >
+                <div class="col-md-4" data-aos="flip-left" data-aos-delay="100">
+                    <div class="stat-card">
                         <span class="stat-number">100%</span>
-                        <h5 class="text-muted mb-0">Patient Satisfaction           <strong style="color: white;">/</strong></h5>
+                        <h5 class="text-muted mb-0">Patient Satisfaction</h5>
                     </div>
                 </div>
-            </div> 
-            <br>   
-            <div class="row g-4 justify-content-center">
-                <div class="col-md-12 col- sm-6 justify-content-center">
-                    <div class="stat-card">
-                        <span class="stat-number">5 ⭐</span>
-                        <h5 class="text-muted mb-0">Rating</h5>
+                <div class="col-md-4" data-aos="flip-left" data-aos-delay="200">
+                    <div class="stat-card rating-card">
+                        <div class="rating-badge mb-3">
+                            <div class="stars-wrapper">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                            <div class="rating-text">
+                                <span class="rating-number">5.0</span>
+                                <span class="rating-label">Rating</span>
+                            </div>
+                        </div>
+                        <h5 class="text-muted mb-0">
+                            <i class="bi bi-google me-1"></i>Google Reviews
+                        </h5>
                     </div>
                 </div>
             </div>
