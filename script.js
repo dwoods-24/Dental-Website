@@ -291,7 +291,7 @@ function setupServiceDetails() {
                     <p class="mb-3">Cast Metal Partial Dentures</p>
                     
                     <h6 class="text-primary mb-2"><i class="bi bi-shield-check me-2"></i>Warranty</h6>
-                    <p class="mb-3">6 months against teeth popping out and breakage</p>
+                    <p class="mb-3">1 year against teeth popping out and breakage</p>
                     
                     <div class="ideal-for-section">
                         <h6 class="text-success mb-2"><i class="bi bi-people-fill me-2"></i>Ideal For</h6>
@@ -318,7 +318,7 @@ function setupServiceDetails() {
                     <p class="mb-3">Combo Flexible Partial Dentures</p>
                     
                     <h6 class="text-primary mb-2"><i class="bi bi-shield-check me-2"></i>Warranty</h6>
-                    <p class="mb-3">6 months against teeth popping out and breakage</p>
+                    <p class="mb-3">3 years against teeth popping out and breakage</p>
                     
                     <div class="ideal-for-section">
                         <h6 class="text-success mb-2"><i class="bi bi-people-fill me-2"></i>Ideal For</h6>
@@ -346,7 +346,7 @@ function setupServiceDetails() {
                     <p class="mb-3">Flexible Partial Dentures</p>
                     
                     <h6 class="text-primary mb-2"><i class="bi bi-shield-check me-2"></i>Warranty</h6>
-                    <p class="mb-3">6 months against teeth popping out and breakage</p>
+                    <p class="mb-3">5 years against teeth popping out and breakage</p>
                     
                     <div class="ideal-for-section">
                         <h6 class="text-success mb-2"><i class="bi bi-people-fill me-2"></i>Ideal For</h6>
