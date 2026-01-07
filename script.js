@@ -245,7 +245,117 @@ function setupServiceDetails() {
                     </div>
                 </div>
             </div>
-        `
+        `,
+
+        'Basic Partial Package': `
+            <div class="service-detail-content">
+                <div class="price-badge mb-3">
+                    <span class="badge bg-primary fs-6">Starting at $475 per arch</span>
+                </div>
+                
+                <div class="service-features">
+                    <h6 class="text-primary mb-2> Description </h6> 
+                    <p class="mb-3">Our acrylic partial dentures offer the fastest turnaround time, frequently available the same day you visit us.</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-gear-fill me-2"></i>Fit & Function</h6>
+                    <p class="mb-3">This classic design uses discreet metal clasps to stay firmly in place. While they utilize a sturdy metal clasp for security and may feel slightly more substantial than other designs, they are carefully crafted to provide a seamless, natural-looking smile.</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-tools me-2"></i>Materials</h6>
+                    <p class="mb-3">Acrylic Partial Dentures</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-shield-check me-2"></i>Warranty</h6>
+                    <p class="mb-3">6 months against teeth popping out and breakage</p>
+                    
+                    <div class="ideal-for-section">
+                        <h6 class="text-success mb-2"><i class="bi bi-people-fill me-2"></i>Ideal For</h6>
+                        <p class="mb-0 fst-italic">Budget-conscious patients who need a reliable restoration quickly, often with same-day availability.</p>
+                    </div>
+                </div>
+            </div>
+        `,
+
+        'Classic Partial Package': `
+            <div class="service-detail-content">
+                <div class="price-badge mb-3">
+                    <span class="badge bg-primary fs-6">Starting at $750 per arch</span>
+                </div>
+                
+                <div class="service-features">
+                    <h6 class="text-primary mb-2> Description </h6> 
+                    <p class="mb-3">Our most popular long-term solution, these dentures use a high-quality, medical-grade metal frame that is both strong and lightweight.</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-gear-fill me-2"></i>Fit & Function</h6>
+                    <p class="mb-3"> The cast metal partial is fabricated using a metal framework to which a laboratory will attach high grade, false, denture teeth. They are highly durable and offer excellent support for chewing. Because the metal piece of these dentures is made in a  laboratory, we must disclose that they may take 2-3 weeks before they are finished and ready to be delivered to the patient.</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-tools me-2"></i>Materials</h6>
+                    <p class="mb-3">Cast Metal Partial Dentures</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-shield-check me-2"></i>Warranty</h6>
+                    <p class="mb-3">6 months against teeth popping out and breakage</p>
+                    
+                    <div class="ideal-for-section">
+                        <h6 class="text-success mb-2"><i class="bi bi-people-fill me-2"></i>Ideal For</h6>
+                        <p class="mb-0 fst-italic">Patients who want a long-term durable solution and are ok with waiting 2-3 weeks to be fabricated</p>
+                    </div>
+                </div>
+            </div>
+        `,
+
+        'Premium Partial Package': `
+            <div class="service-detail-content">
+                <div class="price-badge mb-3">
+                    <span class="badge bg-primary fs-6">Starting at $1250 per arch</span>
+                </div>
+                
+                <div class="service-features">
+                    <h6 class="text-primary mb-2> Description </h6> 
+                    <p class="mb-3">A combo flexible partial denture is a removable dental prosthesis that combines the strength of a metal framework with the comfort and esthetics of a flexible partial denture material.</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-gear-fill me-2"></i>Fit & Function</h6>
+                    <p class="mb-3">This hybrid design offers an ideal balance of strength, comfort, and esthetics.  Combo flexible partial dentures are removable, easy to maintain, and designed to provide a secure, comfortable fit while restoring function and a natural smile. </p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-tools me-2"></i>Materials</h6>
+                    <p class="mb-3">Combo Flexible Partial Dentures</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-shield-check me-2"></i>Warranty</h6>
+                    <p class="mb-3">6 months against teeth popping out and breakage</p>
+                    
+                    <div class="ideal-for-section">
+                        <h6 class="text-success mb-2"><i class="bi bi-people-fill me-2"></i>Ideal For</h6>
+                        <p class="mb-0 fst-italic">Patients who need the long-term reliability of a metal partial denture but prefer the softer feel and improved appearance of flexible materials.</p>
+                    </div>
+                </div>
+                </div>
+            </div>
+        `,
+
+        'Elite Partial Package': `
+            <div class="service-detail-content">
+                <div class="price-badge mb-3">
+                    <span class="badge bg-primary fs-6">Starting at $1750 per arch</span>
+                </div>
+                
+               <div class="service-features">
+                    <h6 class="text-primary mb-2> Description </h6> 
+                    <p class="mb-3">For those seeking maximum comfort and aesthetics.  </p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-gear-fill me-2"></i>Fit & Function</h6>
+                    <p class="mb-3"> Flexible partials are made from a specialized, pressure-injected material that adapts to the constant movement of your mouth. They contain no metal clasps, making them virtually invisible. These are lightweight and hypoallergenic.</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-tools me-2"></i>Materials</h6>
+                    <p class="mb-3">Flexible Partial Dentures</p>
+                    
+                    <h6 class="text-primary mb-2"><i class="bi bi-shield-check me-2"></i>Warranty</h6>
+                    <p class="mb-3">6 months against teeth popping out and breakage</p>
+                    
+                    <div class="ideal-for-section">
+                        <h6 class="text-success mb-2"><i class="bi bi-people-fill me-2"></i>Ideal For</h6>
+                        <p class="mb-0 fst-italic"> patients who find traditional metal or acrylic options irritating. </p>
+                    </div>
+                </div>
+            </div>
+        `,
+        
     };
 
     // Store service details globally for modal access
