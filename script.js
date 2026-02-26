@@ -496,106 +496,90 @@ function formatTimeInput(timeString) {
 
 
 // Enhanced appointment form submission to Netlify
-function validateAndSubmitAppointmentToNetlify() {
-    const nameInput = document.getElementById('name');
-    const phoneInput = document.getElementById('phone');
-    const validationError = document.getElementById('validationError');
-    const errorMessage = document.getElementById('errorMessage');
-    const bookingBtn = document.getElementById('squareBookingBtn');
-    
-    // Get and clean the input values
-    const name = nameInput.value.trim();
-    const phone = phoneInput.value.trim();
-    
-    // Clear any previous validation states
-    nameInput.classList.remove('is-invalid');
-    phoneInput.classList.remove('is-invalid');
-    validationError.classList.add('d-none');
-    
-    // Check if name is empty first (highest priority)
-    if (!name) {
-        showValidationErrorAndFocus('Please enter your full name to continue.', nameInput);
-        return;
-    }
-    
-    // Check if phone is empty (second priority)
-    if (!phone) {
-        showValidationErrorAndFocus('Please enter your phone number for appointment confirmations.', phoneInput);
-        return;
-    }
-    
-    // Validate name format ONLY if name has content
-    const nameParts = name.split(/\s+/).filter(part => part.length > 0);
-    if (nameParts.length < 2) {
-        showValidationErrorAndFocus('Please enter your first and last name.', nameInput);
-        return;
-    }
-    
-    // Check if name contains only valid characters ONLY if name has content
-    const nameRegex = /^[a-zA-Z\s\-'\.]+$/;
-    if (!nameRegex.test(name)) {
-        showValidationErrorAndFocus('Please enter a valid name using only letters.', nameInput);
-        return;
-    }
-    
-    // Validate phone format ONLY if phone has content
-    const phoneRegex = /^[\d\s\-\(\)\+]+$/;
-    if (!phoneRegex.test(phone) || phone.replace(/\D/g, '').length < 10) {
-        showValidationErrorAndFocus('Please enter a valid phone number (at least 10 digits).', phoneInput);
-        return;
-    }
-    
-    // If all validation passes, submit to Netlify
-    showLoadingState(bookingBtn);
-    
-    // Submit the appointment form to Netlify
-    submitAppointmentToNetlify()
-        .then((result) => {
-            console.log('Appointment submission successful:', result);
-            showAppointmentSubmissionSuccess();
-        })
-        .catch((error) => {
-            console.error('Appointment submission failed:', error);
-            showAppointmentSubmissionError(error);
-        })
-        .finally(() => {
-            resetButtonState(bookingBtn);
-        });
+async function submitAppointmentToNetlify(name, phone, message) {
+    const formData = new FormData();
+    formData.append('form-name', 'appointment-requests');
+    formData.append('name', name);
+    formData.append('phone', phone);
+    formData.append('message', message || '');
+    formData.append('submission_timestamp', new Date().toISOString());
+
+    const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData)
+    });
+
+    if (!response.ok) throw new Error(`Submission failed: ${response.status}`);
+    return { success: true };
 }
 
-// Submit appointment form data to Netlify
-async function submitAppointmentToNetlify() {
+async function validateAndSubmitAppointmentToNetlify() {
+    const nameInput = document.getElementById('appt-name');
+    const phoneInput = document.getElementById('appt-phone');
+    const messageInput = document.getElementById('appt-message');
+    const submitBtn = document.getElementById('hero-submit-btn');
+    const errorDiv = document.getElementById('hero-form-error');
+    const errorMsg = document.getElementById('hero-error-msg');
+    const successDiv = document.getElementById('hero-form-success');
+
+    const name = nameInput.value.trim();
+    const phone = phoneInput.value.trim();
+    const message = messageInput ? messageInput.value.trim() : '';
+
+    // Reset previous states
+    errorDiv.style.display = 'none';
+    successDiv.style.display = 'none';
+
+    // Validate name
+    if (!name) {
+        errorMsg.textContent = 'Please enter your full name.';
+        errorDiv.style.display = 'block';
+        nameInput.focus();
+        return;
+    }
+    if (name.split(/\s+/).filter(p => p.length > 0).length < 2) {
+        errorMsg.textContent = 'Please enter your first and last name.';
+        errorDiv.style.display = 'block';
+        nameInput.focus();
+        return;
+    }
+    if (!/^[a-zA-Z\s\-'\.]+$/.test(name)) {
+        errorMsg.textContent = 'Please enter a valid name using only letters.';
+        errorDiv.style.display = 'block';
+        nameInput.focus();
+        return;
+    }
+
+    // Validate phone
+    if (!phone) {
+        errorMsg.textContent = 'Please enter your phone number.';
+        errorDiv.style.display = 'block';
+        phoneInput.focus();
+        return;
+    }
+    if (!/^[\d\s\-\(\)\+]+$/.test(phone) || phone.replace(/\D/g, '').length < 10) {
+        errorMsg.textContent = 'Please enter a valid phone number (at least 10 digits).';
+        errorDiv.style.display = 'block';
+        phoneInput.focus();
+        return;
+    }
+
+    // Loading state
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Submitting...';
+
     try {
-        console.log('Submitting appointment to Netlify...');
-        
-        // Get all form data
-        const formData = new FormData();
-        formData.append('form-name', 'appointment-requests');
-        formData.append('name', document.getElementById('name').value.trim());
-        formData.append('phone', document.getElementById('phone').value.trim());
-        formData.append('email', document.getElementById('email').value.trim());
-        formData.append('service', document.getElementById('service').value);
-        formData.append('date', document.getElementById('date').value);
-        formData.append('time', document.getElementById('time').value.trim());
-        formData.append('message', document.getElementById('message').value.trim());
-        formData.append('submission_timestamp', new Date().toISOString());
-        
-        const response = await fetch('/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams(formData)
-        });
-        
-        if (!response.ok) {
-            throw new Error(`Netlify submission failed: ${response.status}`);
-        }
-        
-        console.log('Successfully submitted appointment to Netlify');
-        return { success: true };
-        
+        await submitAppointmentToNetlify(name, phone, message);
+        successDiv.style.display = 'block';
+        document.getElementById('appointmentForm').reset();
     } catch (error) {
-        console.error('Netlify appointment submission error:', error);
-        throw error;
+        console.error('Submission error:', error);
+        errorMsg.textContent = 'Something went wrong. Please call us at 615-719-7883.';
+        errorDiv.style.display = 'block';
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="bi bi-calendar-plus me-2"></i>Request Appointment';
     }
 }
 
@@ -650,56 +634,7 @@ function showAppointmentSubmissionSuccess() {
     }
 }
 
-// Show appointment submission error
-function showAppointmentSubmissionError(error) {
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'alert alert-warning mt-3 fade show';
-    errorDiv.innerHTML = `
-        <div class="d-flex align-items-center">
-            <i class="bi bi-exclamation-triangle-fill me-3" style="font-size: 1.5rem;"></i>
-            <div>
-                <h5 class="alert-heading mb-1">Submission Issue</h5>
-                <p class="mb-2">There was an issue submitting your appointment request online. Please try one of these alternatives:</p>
-                <div class="row g-2">
-                    <div class="col-md-6">
-                        <a href="tel:615-719-7883" class="btn btn-warning btn-sm w-100">
-                            <i class="bi bi-telephone me-1"></i>Call: 615-719-7883
-                        </a>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="mailto:denturesandmore1@yahoo.com" class="btn btn-outline-warning btn-sm w-100">
-                            <i class="bi bi-envelope me-1"></i>Email Us
-                        </a>
-                    </div>
-                </div>
-                <hr class="my-2">
-                <p class="mb-0">
-                    <small>
-                        <strong>Technical details:</strong> ${error.message || 'Unknown error occurred'}
-                    </small>
-                </p>
-            </div>
-        </div>
-    `;
-    
-    const appointmentForm = document.getElementById('appointmentForm');
-    if (appointmentForm) {
-        appointmentForm.appendChild(errorDiv);
-        
-        // Remove error message after 30 seconds
-        setTimeout(() => {
-            if (errorDiv.parentNode) {
-                errorDiv.remove();
-            }
-        }, 30000);
-        
-        // Scroll to error message
-        errorDiv.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'center' 
-        });
-    }
-}
+
 
 // Alternative function that submits to Netlify AND opens Google Appointments
 function validateAndSubmitThenRedirect() {
