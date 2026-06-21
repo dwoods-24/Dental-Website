@@ -24,11 +24,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <!-- AOS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.min.css" rel="stylesheet">
     <!-- Main site CSS -->
     <link rel="stylesheet" href="/styles.css">
 
@@ -62,6 +63,7 @@
             font-family: 'DM Sans', sans-serif;
             color: var(--dark);
             background: var(--off-white);
+            overscroll-behavior-y: contain;
         }
 
         h1,
@@ -240,7 +242,7 @@
         /* ---- PACKAGE CARDS ---- */
         .pkg-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 1.5rem;
         }
 
@@ -252,6 +254,10 @@
             transition: all .32s cubic-bezier(.175, .885, .32, 1.275);
             cursor: pointer;
             position: relative;
+            display: grid;
+            grid-row: span 9;
+            grid-template-rows: subgrid;
+            padding-bottom: 25px;
         }
 
         .pkg-card::before {
@@ -292,7 +298,13 @@
 
         .pkg-card-body {
             padding: 1.6rem;
+            padding-bottom: 0;
             text-align: center;
+            display: grid;
+            grid-row: span 8;
+            grid-template-rows: subgrid;
+            align-items: start;
+            min-width: 0;
         }
 
         .pkg-icon {
@@ -300,6 +312,9 @@
             height: 140px;
             object-fit: contain;
             margin-bottom: 1rem;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .pkg-tier-badge {
@@ -324,6 +339,8 @@
             color: var(--mid);
             margin-bottom: 1rem;
             line-height: 1.5;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
 
         .pkg-price {
@@ -333,8 +350,9 @@
             background: #f1f8e9;
             border-radius: 8px;
             padding: .4rem .8rem;
-            display: inline-block;
+            display: block;
             margin-bottom: 1rem;
+            overflow-wrap: break-word;
         }
 
         .pkg-features {
@@ -352,6 +370,9 @@
             display: flex;
             align-items: flex-start;
             gap: .5rem;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            min-width: 0;
         }
 
         .pkg-features li:last-child {
@@ -366,6 +387,8 @@
 
         .pkg-book-btn {
             width: 100%;
+            margin-top: 0;
+            margin-bottom: 0;
             background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
             border: none;
             color: #fff;
@@ -571,14 +594,28 @@
             font-size: .85rem;
         }
 
+        /* ---- PILL NAV SCROLLBAR ---- */
+        .cat-pill-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
         /* ---- MOBILE ---- */
         @media (max-width: 768px) {
+
+            /* <br> tags before hero add ~60px; reduce hero top padding to compensate */
             .services-hero {
-                padding: 110px 0 60px;
+                padding: 50px 0 50px;
             }
 
-            .pkg-grid {
-                grid-template-columns: 1fr;
+            .category-pill-nav {
+                top: 68px;
+            }
+
+            .cat-pill {
+                padding: .5rem 1rem;
+                min-height: 40px;
+                display: inline-flex;
+                align-items: center;
             }
 
             .cta-section {
@@ -587,6 +624,65 @@
 
             .financing-strip {
                 padding: 1.5rem;
+            }
+
+            .compare-table thead th,
+            .compare-table tbody td {
+                font-size: .78rem;
+                padding: .6rem .5rem;
+            }
+        }
+
+        /* ---- SMALL PHONES (<576px) ---- */
+        @media (max-width: 575px) {
+            .services-hero {
+                padding: 30px 0 40px;
+            }
+
+            .services-hero h1 {
+                font-size: 2rem;
+            }
+
+            .services-hero p.lead {
+                font-size: 1rem;
+            }
+
+            .hero-stat {
+                padding: .65rem .75rem;
+            }
+
+            .hero-stat .stat-num {
+                font-size: 1.5rem;
+            }
+
+            .pkg-card-body {
+                padding: 1.1rem;
+                padding-bottom: 0;
+            }
+
+            .pkg-name {
+                font-size: 1.15rem;
+            }
+
+            .pkg-price {
+                font-size: 1rem;
+            }
+
+            .warranty-badge {
+                margin-bottom: 2rem;
+            }
+
+            .cta-section .d-flex {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .cta-section .d-flex a {
+                text-align: center;
+            }
+
+            .section-title {
+                font-size: 1.6rem;
             }
         }
 
@@ -637,12 +733,12 @@
             border-radius: 6px;
             padding: .2rem .6rem;
             margin-top: .3rem;
+            margin-bottom: 3rem;
         }
     </style>
 </head>
 
 <body>
-
     <!-- ============ NAVIGATION ============ -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="navbar">
         <div class="container">
@@ -681,8 +777,8 @@
             <div class="row align-items-center g-5">
                 <div class="col-lg-6" data-aos="fade-right" data-aos-duration="900">
                     <div class="badge-pill"><i class="bi bi-stars me-1"></i>Serving Nashville Since 1990</div>
-                    <h1 class="mb-3">Exceptional Dental<br>Care, Every Step.</h1>
-                    <p class="lead mb-4">From complete dentures to implants and same-day repairs — we have a package
+                    <h1 class="mb-3">Exceptional Dental<br>Care, Every Step</h1>
+                    <p class="lead mb-4">From complete dentures to implants and same-day repairs, we have a package
                         designed for every need and budget.</p>
                     <div class="d-flex flex-wrap gap-3">
                         <a href="/index.html#appointment" class="hero-cta-primary">
@@ -707,7 +803,7 @@
                         </div>
                         <div class="col-6">
                             <div class="hero-stat">
-                                <span class="stat-num">$475</span>
+                                <span class="stat-num">$750</span>
                                 <span class="stat-label">Packages Starting From</span>
                             </div>
                         </div>
@@ -726,9 +822,11 @@
     <!-- ============ STICKY CATEGORY NAV ============ -->
     <div class="category-pill-nav">
         <div class="container">
-            <div class="d-flex gap-2 overflow-auto pb-1" style="scrollbar-width:none;">
+            <div class="d-flex gap-2 overflow-auto pb-1 cat-pill-scroll"
+                style="scrollbar-width:none; -webkit-overflow-scrolling:touch;">
                 <a href="#complete-dentures" class="cat-pill active-pill">Complete Dentures</a>
                 <a href="#partial-dentures" class="cat-pill">Partial Dentures</a>
+                <a href="#dental-implants" class="cat-pill">Dental Implants</a>
                 <a href="#other-services" class="cat-pill">Other Services</a>
                 <a href="#compare" class="cat-pill">Compare Packages</a>
                 <a href="#financing" class="cat-pill">Financing</a>
@@ -743,7 +841,7 @@
         <div class="container">
             <div class="text-center mb-5" data-aos="fade-up">
                 <p class="section-eyebrow"><i class="bi bi-emoji-smile me-1"></i>Complete Dentures</p>
-                <h2 class="section-title">Full-Arch Denture Packages</h2>
+                <h2 class="section-title">Full Arch Denture Packages</h2>
                 <div class="section-divider"></div>
                 <p class="text-muted mx-auto" style="max-width:560px;">Four tiers to match every budget and lifestyle —
                     each with a wax try-in, custom shading, and a written warranty.</p>
@@ -752,16 +850,15 @@
             <div class="pkg-grid">
 
                 <!-- Essential -->
-                <div class="pkg-card" data-aos="fade-up" data-aos-delay="0"
-                    onclick="bookService('Essential Smile Package')">
+                <div class="pkg-card" onclick="bookService('Essential Smile Package')">
                     <div class="pkg-card-header"></div>
                     <div class="pkg-card-body">
-                        <img src="/img/Service_icon3.png" class="pkg-icon" alt="Essential Smile Package">
+                        <img src="/img/Service_icon3.png" class="pkg-icon" loading="lazy" alt="Essential Smile Package">
                         <p class="pkg-tier-badge">Tier 1 — Essential</p>
                         <h3 class="pkg-name">Essential Smile</h3>
                         <p class="pkg-desc">Our most affordable complete denture — dependable function at a price that
                             makes sense.</p>
-                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>From $475 / arch</div>
+                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>Starting at $750 / arch</div>
                         <ul class="pkg-features">
                             <li><i class="bi bi-check-circle-fill"></i>Custom shade &amp; gum color selection</li>
                             <li><i class="bi bi-check-circle-fill"></i>Basic fit with wax try-in</li>
@@ -769,22 +866,20 @@
                             <li><i class="bi bi-check-circle-fill"></i>Ideal for budget-conscious patients</li>
                         </ul>
                         <div class="warranty-badge"><i class="bi bi-shield-check"></i>6-month warranty</div>
-                        <br><br>
                         <button class="pkg-book-btn"><i class="bi bi-calendar-plus me-1"></i>Book This Package</button>
                     </div>
                 </div>
 
                 <!-- Comfort Fit -->
-                <div class="pkg-card" data-aos="fade-up" data-aos-delay="80"
-                    onclick="bookService('Comfort Fit Package')">
+                <div class="pkg-card" onclick="bookService('Comfort Fit Package')">
                     <div class="pkg-card-header comfort"></div>
                     <div class="pkg-card-body">
-                        <img src="/img/Service_icon2.png" class="pkg-icon" alt="Comfort Fit Package">
+                        <img src="/img/Service_icon2.png" class="pkg-icon" loading="lazy" alt="Comfort Fit Package">
                         <p class="pkg-tier-badge">Tier 2 — Comfort</p>
                         <h3 class="pkg-name">Comfort Fit</h3>
                         <p class="pkg-desc">Premium acrylic for noticeably better daily comfort, with added
                             customization options.</p>
-                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>From $750 / arch</div>
+                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>Starting at $950 / arch</div>
                         <ul class="pkg-features">
                             <li><i class="bi bi-check-circle-fill"></i>Custom shade &amp; gum color selection</li>
                             <li><i class="bi bi-check-circle-fill"></i>Improved fit with some customization</li>
@@ -792,22 +887,20 @@
                             <li><i class="bi bi-check-circle-fill"></i>Balance of cost &amp; comfort</li>
                         </ul>
                         <div class="warranty-badge"><i class="bi bi-shield-check"></i>1-year warranty</div>
-                        <br><br>
                         <button class="pkg-book-btn"><i class="bi bi-calendar-plus me-1"></i>Book This Package</button>
                     </div>
                 </div>
 
                 <!-- Premium Smile -->
-                <div class="pkg-card" data-aos="fade-up" data-aos-delay="160"
-                    onclick="bookService('Premium Smile Package')">
+                <div class="pkg-card" onclick="bookService('Premium Smile Package')">
                     <div class="pkg-card-header premium"></div>
                     <div class="pkg-card-body">
-                        <img src="/img/Service_icon1.png" class="pkg-icon" alt="Premium Smile Package">
+                        <img src="/img/Service_icon1.png" class="pkg-icon" loading="lazy" alt="Premium Smile Package">
                         <p class="pkg-tier-badge" style="color:#7C4DFF;">Tier 3 — Premium</p>
                         <h3 class="pkg-name">Premium Smile</h3>
                         <p class="pkg-desc">Durable, stain-resistant materials with advanced customization for a truly
                             natural look.</p>
-                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>$1,250 / arch</div>
+                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>Starting at $1,250 / arch</div>
                         <ul class="pkg-features">
                             <li><i class="bi bi-check-circle-fill"></i>Custom shade &amp; gum color selection</li>
                             <li><i class="bi bi-check-circle-fill"></i>Excellent fit with advanced customization</li>
@@ -815,22 +908,20 @@
                             <li><i class="bi bi-check-circle-fill"></i>Long-lasting aesthetics</li>
                         </ul>
                         <div class="warranty-badge"><i class="bi bi-shield-check"></i>3-year warranty</div>
-                        <br><br>
                         <button class="pkg-book-btn"><i class="bi bi-calendar-plus me-1"></i>Book This Package</button>
                     </div>
                 </div>
 
                 <!-- Elite Comfort -->
-                <div class="pkg-card" data-aos="fade-up" data-aos-delay="240"
-                    onclick="bookService('Elite Comfort Package')">
+                <div class="pkg-card" onclick="bookService('Elite Comfort Package')">
                     <div class="pkg-card-header elite"></div>
                     <div class="pkg-card-body">
-                        <img src="/img/Service_icon4.png" class="pkg-icon" alt="Elite Comfort Package">
+                        <img src="/img/Service_icon4.png" class="pkg-icon" loading="lazy" alt="Elite Comfort Package">
                         <p class="pkg-tier-badge" style="color:#E65100;">Tier 4 — Elite</p>
                         <h3 class="pkg-name">Elite Comfort</h3>
                         <p class="pkg-desc">The absolute best in comfort, longevity, and aesthetics — premium materials
                             with superior customization.</p>
-                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>From $1,750 / arch</div>
+                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>Starting at $1,750 / arch</div>
                         <ul class="pkg-features">
                             <li><i class="bi bi-check-circle-fill"></i>Custom shade &amp; gum color selection</li>
                             <li><i class="bi bi-check-circle-fill"></i>Superior fit with extensive customization</li>
@@ -838,7 +929,6 @@
                             <li><i class="bi bi-check-circle-fill"></i>Best in comfort &amp; longevity</li>
                         </ul>
                         <div class="warranty-badge"><i class="bi bi-shield-check"></i>5-year warranty</div>
-                        <br><br>
                         <button class="pkg-book-btn"><i class="bi bi-calendar-plus me-1"></i>Book This Package</button>
                     </div>
                 </div>
@@ -855,23 +945,22 @@
                 <p class="section-eyebrow"><i class="bi bi-grid-3x2 me-1"></i>Partial Dentures</p>
                 <h2 class="section-title">Partial Denture Packages</h2>
                 <div class="section-divider"></div>
-                <p class="text-muted mx-auto" style="max-width:560px;">Four material options — from same-day acrylic to
-                    invisible flexible partials — each engineered for a secure, natural-looking fit.</p>
+                <p class="text-muted mx-auto" style="max-width:560px;">Four material options, from same-day acrylic to
+                    invisible flexible partials, each engineered for a secure, natural-looking fit.</p>
             </div>
 
             <div class="pkg-grid">
 
                 <!-- Basic Partial -->
-                <div class="pkg-card" data-aos="fade-up" data-aos-delay="0"
-                    onclick="bookService('Basic Partial Package')">
+                <div class="pkg-card" onclick="bookService('Basic Partial Package')">
                     <div class="pkg-card-header"></div>
                     <div class="pkg-card-body">
-                        <img src="/img/BasicPartial.PNG" class="pkg-icon" alt="Basic Partial">
+                        <img src="/img/BasicPartial.PNG" class="pkg-icon" loading="lazy" alt="Basic Partial">
                         <p class="pkg-tier-badge">Tier 1 — Basic</p>
                         <h3 class="pkg-name">Basic Partial</h3>
                         <p class="pkg-desc">All-acrylic partial with the fastest turnaround — frequently available the
                             same day you visit.</p>
-                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>From $475</div>
+                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>Starting at $750 / arch</div>
                         <ul class="pkg-features">
                             <li><i class="bi bi-check-circle-fill"></i>All-acrylic construction</li>
                             <li><i class="bi bi-check-circle-fill"></i>Discreet metal clasps for security</li>
@@ -879,22 +968,20 @@
                             <li><i class="bi bi-check-circle-fill"></i>Quick, reliable restoration</li>
                         </ul>
                         <div class="warranty-badge"><i class="bi bi-shield-check"></i>6-month warranty</div>
-                        <br><br>
                         <button class="pkg-book-btn"><i class="bi bi-calendar-plus me-1"></i>Book This Package</button>
                     </div>
                 </div>
 
                 <!-- Classic Partial -->
-                <div class="pkg-card" data-aos="fade-up" data-aos-delay="80"
-                    onclick="bookService('Classic Partial Package')">
+                <div class="pkg-card" onclick="bookService('Classic Partial Package')">
                     <div class="pkg-card-header comfort"></div>
                     <div class="pkg-card-body">
-                        <img src="/img/ClassicPartial.PNG" class="pkg-icon" alt="Classic Partial">
+                        <img src="/img/ClassicPartial.PNG" class="pkg-icon" loading="lazy" alt="Classic Partial">
                         <p class="pkg-tier-badge">Tier 2 — Classic</p>
                         <h3 class="pkg-name">Classic Partial</h3>
                         <p class="pkg-desc">Our most popular long-term solution — cast metal framework with high-grade
                             denture teeth. Fabricated in 2–3 weeks.</p>
-                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>From $750</div>
+                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>Starting at $950 / arch</div>
                         <ul class="pkg-features">
                             <li><i class="bi bi-check-circle-fill"></i>Medical-grade metal framework</li>
                             <li><i class="bi bi-check-circle-fill"></i>Lightweight yet highly durable</li>
@@ -902,22 +989,20 @@
                             <li><i class="bi bi-check-circle-fill"></i>2–3 week lab fabrication</li>
                         </ul>
                         <div class="warranty-badge"><i class="bi bi-shield-check"></i>1-year warranty</div>
-                        <br><br>
                         <button class="pkg-book-btn"><i class="bi bi-calendar-plus me-1"></i>Book This Package</button>
                     </div>
                 </div>
 
                 <!-- Premium Partial -->
-                <div class="pkg-card" data-aos="fade-up" data-aos-delay="160"
-                    onclick="bookService('Premium Partial Package')">
+                <div class="pkg-card" onclick="bookService('Premium Partial Package')">
                     <div class="pkg-card-header premium"></div>
                     <div class="pkg-card-body">
-                        <img src="/img/PremiumPartial.PNG" class="pkg-icon" alt="Premium Partial">
+                        <img src="/img/PremiumPartial.PNG" class="pkg-icon" loading="lazy" alt="Premium Partial">
                         <p class="pkg-tier-badge" style="color:#7C4DFF;">Tier 3 — Premium</p>
                         <h3 class="pkg-name">Premium Partial</h3>
                         <p class="pkg-desc">A combo flexible design — the strength of metal with the softer feel of
                             flexible materials. Best of both worlds.</p>
-                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>From $1,250</div>
+                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>Starting at $1,250 / arch</div>
                         <ul class="pkg-features">
                             <li><i class="bi bi-check-circle-fill"></i>Hybrid metal + flexible design</li>
                             <li><i class="bi bi-check-circle-fill"></i>Improved aesthetics over cast metal</li>
@@ -925,22 +1010,20 @@
                             <li><i class="bi bi-check-circle-fill"></i>Secure fit with easy maintenance</li>
                         </ul>
                         <div class="warranty-badge"><i class="bi bi-shield-check"></i>3-year warranty</div>
-                        <br><br>
                         <button class="pkg-book-btn"><i class="bi bi-calendar-plus me-1"></i>Book This Package</button>
                     </div>
                 </div>
 
                 <!-- Elite Partial -->
-                <div class="pkg-card" data-aos="fade-up" data-aos-delay="240"
-                    onclick="bookService('Elite Partial Package')">
+                <div class="pkg-card" onclick="bookService('Elite Partial Package')">
                     <div class="pkg-card-header elite"></div>
                     <div class="pkg-card-body">
-                        <img src="/img/ElitePartial.PNG" class="pkg-icon" alt="Elite Partial">
+                        <img src="/img/ElitePartial.PNG" class="pkg-icon" loading="lazy" alt="Elite Partial">
                         <p class="pkg-tier-badge" style="color:#E65100;">Tier 4 — Elite</p>
                         <h3 class="pkg-name">Elite Partial</h3>
                         <p class="pkg-desc">Fully flexible, metal-free — virtually invisible clasps, hypoallergenic, and
                             engineered for maximum comfort.</p>
-                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>From $1,750</div>
+                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>Starting at $1,750 / arch</div>
                         <ul class="pkg-features">
                             <li><i class="bi bi-check-circle-fill"></i>Pressure-injected flexible material</li>
                             <li><i class="bi bi-check-circle-fill"></i>No metal clasps — virtually invisible</li>
@@ -948,7 +1031,135 @@
                             <li><i class="bi bi-check-circle-fill"></i>Ideal for sensitive patients</li>
                         </ul>
                         <div class="warranty-badge"><i class="bi bi-shield-check"></i>5-year warranty</div>
-                        <br><br>
+                        <button class="pkg-book-btn"><i class="bi bi-calendar-plus me-1"></i>Book This Package</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============ DENTAL IMPLANTS ============ -->
+    <section id="dental-implants" class="py-5" style="background:#fff;">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <p class="section-eyebrow"><i class="bi bi-stars me-1"></i>Dental Implants</p>
+                <h2 class="section-title">Dental Implant Packages</h2>
+                <div class="section-divider"></div>
+                <p class="text-muted mx-auto" style="max-width:560px;">Four implant options — from a single-tooth
+                    replacement to a full-arch solution — each designed for a permanent, natural-looking result.</p>
+            </div>
+
+            <!-- Implant Animation -->
+            <div style="
+                display: flex;
+                justify-content: center;
+                margin: 0 auto 3rem;
+                max-width: 460px;
+                width: 100%;
+                border-radius: 16px;
+                overflow: hidden;
+            " data-aos="fade-up">
+                <video style="width: 100%; display: block; pointer-events: none;" autoplay loop muted playsinline
+                    preload="metadata">
+                    <source src="/img/implant.mp4" type="video/mp4">
+                    Your browser does not support this video format.
+                </video>
+            </div>
+
+            <div class="pkg-grid">
+
+                <!-- Single Implant -->
+                <div class="pkg-card" onclick="bookService('Single Implant Package')">
+                    <div class="pkg-card-header"></div>
+                    <div class="pkg-card-body">
+                        <div
+                            style="width: 100%; max-width: 230px; height: 145px; border-radius: 14px; overflow: hidden; margin: 0 auto 1rem;">
+                            <img src="/img/single_implant.jpg" loading="lazy" alt="Single Implant"
+                                style="width: 100%; height: 100%; object-fit: cover; transform: scale(1.08);">
+                        </div>
+                        <h3 class="pkg-name">Single Implant</h3>
+                        <p class="pkg-desc">Replace one missing tooth with a titanium implant and custom crown — a
+                            permanent, natural-looking solution.</p>
+                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>Starting at $3,495</div>
+                        <ul class="pkg-features">
+                            <li><i class="bi bi-check-circle-fill"></i>Stain Free</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Custom Shade</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Natural Appearance</li>
+                        </ul>
+                        <div class="warranty-badge"><i class="bi bi-shield-check"></i> 3 year warranty</div>
+                        <button class="pkg-book-btn"><i class="bi bi-calendar-plus me-1"></i>Book This Package</button>
+                    </div>
+                </div>
+
+                <!-- Fixed Implant Bridge -->
+                <div class="pkg-card" onclick="bookService('Implant Supported Partial Package')">
+                    <div class="pkg-card-header comfort"></div>
+                    <div class="pkg-card-body">
+                        <div
+                            style="width: 100%; max-width: 230px; height: 145px; border-radius: 14px; overflow: hidden; margin: 0 auto 1rem;">
+                            <img src="/img/partial_implant.png" loading="lazy" alt="Implant Supported Partial"
+                                style="width: 100%; height: 100%; object-fit: cover; transform: scale(1.08);">
+                        </div>
+                        <h3 class="pkg-name">Fixed Implant Bridge</h3>
+                        <p class="pkg-desc">Replace multiple missing teeth with an implant-supported bridge — more
+                            stable than a traditional bridge.</p>
+                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>Starting at $8,995</div>
+                        <ul class="pkg-features">
+                            <li><i class="bi bi-check-circle-fill"></i>Stain Free</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Custom Shade</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Natural Appearance</li>
+                        </ul>
+                        <div class="warranty-badge"><i class="bi bi-shield-check"></i> 3 year warranty</div>
+                        <button class="pkg-book-btn"><i class="bi bi-calendar-plus me-1"></i>Book This Package</button>
+                    </div>
+                </div>
+
+                <!-- Acrylic Implant Denture -->
+                <div class="pkg-card" onclick="bookService('Acrylic Implant Denture Package')">
+                    <div class="pkg-card-header premium"></div>
+                    <div class="pkg-card-body">
+                        <div
+                            style="width: 100%; max-width: 230px; height: 145px; border-radius: 14px; overflow: hidden; margin: 0 auto 1rem;">
+                            <img src="/img/acrylic_denture.png" loading="lazy" alt="Acrylic Denture"
+                                style="width: 100%; height: 100%; object-fit: cover; transform: scale(1.08);">
+                        </div>
+                        <h3 class="pkg-name">Acrylic Implant Denture</h3>
+                        <p class="pkg-desc">A removable full denture made from high-quality acrylic for a comfortable
+                            and natural look.</p>
+                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>Starting at $11,995</div>
+                        <ul class="pkg-features">
+                            <li><i class="bi bi-check-circle-fill"></i>Custom shade &amp; gum color selection</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Superior fit with extensive customization</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Premium Acrylic materials</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Best in comfort &amp; longevity</li>
+                        </ul>
+                        <div class="warranty-badge"><i class="bi bi-shield-check"></i>5 year warranty</div>
+                        <button class="pkg-book-btn"><i class="bi bi-calendar-plus me-1"></i>Book This Package</button>
+                    </div>
+                </div>
+
+                <!-- Zirconia Implant Denture -->
+                <div class="pkg-card" onclick="bookService('Zirconia Implant Denture Package')">
+                    <div class="pkg-card-header elite"></div>
+                    <div class="pkg-card-body">
+                        <div
+                            style="width: 100%; max-width: 230px; height: 145px; border-radius: 14px; overflow: hidden; margin: 0 auto 1rem;">
+                            <img src="/img/zirconia_denture.jpg" loading="lazy" alt="Zirconia Denture"
+                                style="width: 100%; height: 100%; object-fit: cover; transform: scale(1.08);">
+                        </div>
+                        <h3 class="pkg-name">Zirconia Implant Denture</h3>
+                        <p class="pkg-desc">A removable full denture made from high-quality zirconia for a comfortable
+                            and natural look.</p>
+                        <div class="pkg-price"><i class="bi bi-tag me-1"></i>Starting at $17,995</div>
+                        <ul class="pkg-features">
+                            <li><i class="bi bi-check-circle-fill"></i>Custom shade &amp; gum color selection</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Superior fit with extensive customization</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Maximum-durability Zirconia material</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Best in comfort &amp; longevity</li>
+                        </ul>
+                        <div class="warranty-badge"><i class="bi bi-shield-check"></i>5 year warranty</div>
                         <button class="pkg-book-btn"><i class="bi bi-calendar-plus me-1"></i>Book This Package</button>
                     </div>
                 </div>
@@ -1041,8 +1252,8 @@
                     <thead>
                         <tr>
                             <th>Feature</th>
-                            <th class="text-center">Essential<br><small>$475+/arch</small></th>
-                            <th class="text-center">Comfort Fit<br><small>$750+/arch</small></th>
+                            <th class="text-center">Essential<br><small>$750+/arch</small></th>
+                            <th class="text-center">Comfort Fit<br><small>$950+/arch</small></th>
                             <th class="text-center">Premium<br><small>$1,250/arch</small></th>
                             <th class="text-center">Elite<br><small>$1,750+/arch</small></th>
                         </tr>
@@ -1340,7 +1551,7 @@
             </div>
             <hr class="my-4">
             <div class="text-center">
-                <p class="mb-0">&copy; 2025 <a href="https://yelp.com/biz/denturesandmore-nashville"
+                <p class="mb-0">&copy; 2026 <a href="https://yelp.com/biz/denturesandmore-nashville"
                         class="text-white text-decoration-none">Dentures and More</a>. All rights reserved.</p>
             </div>
         </div>
@@ -1350,29 +1561,41 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AOS -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.min.js"></script>
     <script>
         AOS.init({ duration: 900, offset: 80, easing: 'ease-in-out', once: true });
 
-        // ---- NAVBAR SCROLL ----
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
-            nav.classList.toggle('scrolled', window.scrollY > 50);
-        });
+        // ---- SCROLL GUARD (prevents accidental card clicks during touch scroll) ----
+        let _touchMoved = false;
+        document.addEventListener('touchmove', () => { _touchMoved = true; }, { passive: true });
+        document.addEventListener('touchend', () => { setTimeout(() => { _touchMoved = false; }, 150); });
 
         // ---- BOOK SERVICE ----
         function bookService(serviceName) {
-            // Store the selected service and redirect to the appointment form
-            const url = `/index.html#appointment`;
-            window.location.href = url;
-            // After redirect the user can manually pick the service in the form
+            if (_touchMoved) return; // ignore tap that ended a scroll gesture
+            window.location.href = '/index.html#appointment';
         }
 
         // ---- ACTIVE PILL NAV on scroll ----
-        const sections = ['complete-dentures', 'partial-dentures', 'other-services', 'compare', 'financing', 'faq'];
+        const sections = ['complete-dentures', 'partial-dentures', 'dental-implants', 'other-services', 'compare', 'financing', 'faq'];
         const pills = document.querySelectorAll('.cat-pill');
 
+        // ---- SMOOTH SCROLL for pill nav ----
+        pills.forEach(p => {
+            p.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.querySelector(p.getAttribute('href'));
+                if (target) window.scrollTo({ top: target.offsetTop - 110, behavior: 'smooth' });
+            });
+        });
+
+        // ---- COMBINED SCROLL HANDLER ----
         window.addEventListener('scroll', () => {
+            // Navbar shadow
+            const nav = document.getElementById('navbar');
+            nav.classList.toggle('scrolled', window.scrollY > 50);
+
+            // Active pill
             let current = '';
             sections.forEach(id => {
                 const el = document.getElementById(id);
@@ -1381,15 +1604,6 @@
             pills.forEach(p => {
                 p.classList.remove('active-pill');
                 if (p.getAttribute('href') === '#' + current) p.classList.add('active-pill');
-            });
-        });
-
-        // ---- SMOOTH SCROLL for pill nav ----
-        pills.forEach(p => {
-            p.addEventListener('click', e => {
-                e.preventDefault();
-                const target = document.querySelector(p.getAttribute('href'));
-                if (target) window.scrollTo({ top: target.offsetTop - 110, behavior: 'smooth' });
             });
         });
     </script>

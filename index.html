@@ -9,8 +9,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Dentures & More">
-    <meta name="format-detection" content="telephone=yes">
-
     <!-- Android Specific Meta Tags -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#3179e6">
@@ -56,8 +54,6 @@
     <link rel="stylesheet" href="/styles.css">
     <!--Ahrefs analytics-->
     <script src="https://analytics.ahrefs.com/analytics.js" data-key="sHUNmVlT6Ytcp+ApbOBOGw" async></script>
-    <!-- Google Calendar API -->
-    <script src="https://apis.google.com/js/api.js" async defer></script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7P1SQV3EWB"></script>
     <script>
@@ -68,7 +64,7 @@
         gtag('config', 'G-7P1SQV3EWB');
     </script>
     <!-- AOS (Animate On Scroll) CSS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Local Business Schema Markup -->
     <script type="application/ld+json">
     {
@@ -1008,7 +1004,7 @@
                                 onclick="showServiceDetails('Essential Smile Package')">
                                 <div class="card-body p-4">
                                     <img src="/img/Service_icon3.png" class="service-icon mb-3"
-                                        alt="Essential Smile Package">
+                                        alt="Essential Smile Package" loading="lazy">
                                     <h3 class="card-title h4 text-primary mb-3">Essential Smile Package</h3>
                                     <p class="card-text text-muted">Our most affordable complete denture solution</p>
                                     <p class="fw-bold text-success">Starting at $475 per arch</p>
@@ -1020,7 +1016,7 @@
                                 onclick="showServiceDetails('Comfort Fit Package')">
                                 <div class="card-body p-4">
                                     <img src="/img/Service_icon2.png" class="service-icon mb-3"
-                                        alt="Comfort Fit Package">
+                                        alt="Comfort Fit Package" loading="lazy">
                                     <h3 class="card-title h4 text-primary mb-3">Comfort Fit Package</h3>
                                     <p class="card-text text-muted">Enhanced comfort with premium materials</p>
                                     <p class="fw-bold text-success">Starting at $750 per arch</p>
@@ -1032,7 +1028,7 @@
                                 onclick="showServiceDetails('Premium Smile Package')">
                                 <div class="card-body p-4">
                                     <img src="/img/Service_icon1.png" class="service-icon mb-3"
-                                        alt="Premium Smile Package">
+                                        alt="Premium Smile Package" loading="lazy">
                                     <h3 class="card-title h4 text-primary mb-3">Premium Smile Package</h3>
                                     <p class="card-text text-muted">Top-tier quality for a natural look</p>
                                     <p class="fw-bold text-success">$1,250 per arch</p>
@@ -1044,7 +1040,7 @@
                                 onclick="showServiceDetails('Elite Comfort Package')">
                                 <div class="card-body p-4">
                                     <img src="/img/Service_icon4.png" class="service-icon mb-3"
-                                        alt="Elite Comfort Package">
+                                        alt="Elite Comfort Package" loading="lazy">
                                     <h3 class="card-title h4 text-primary mb-3">Elite Comfort Package</h3>
                                     <p class="card-text text-muted">Ultimate comfort and aesthetics</p>
                                     <p class="fw-bold text-success">Starting at $1,750 per arch</p>
@@ -1062,7 +1058,7 @@
                                 onclick="showServiceDetails('Basic Partial Package')">
                                 <div class="card-body p-4">
                                     <img src="/img/BasicPartial.PNG" class="service-icon mb-3"
-                                        alt="Basic Partial Package">
+                                        alt="Basic Partial Package" loading="lazy">
                                     <h3 class="card-title h4 text-success mb-3">Basic Partial Package</h3>
                                     <p class="card-text text-muted">Affordable solution for missing teeth</p>
                                     <p class="fw-bold text-success">Starting at $475</p>
@@ -1074,7 +1070,7 @@
                                 onclick="showServiceDetails('Classic Partial Package')">
                                 <div class="card-body p-4">
                                     <img src="/img/ClassicPartial.PNG" class="service-icon mb-3"
-                                        alt="Classic Partial Package">
+                                        alt="Classic Partial Package" loading="lazy">
                                     <h3 class="card-title h4 text-success mb-3">Classic Partial Package</h3>
                                     <p class="card-text text-muted">Enhanced fit and natural appearance</p>
                                     <p class="fw-bold text-success">Starting at $750</p>
@@ -1086,7 +1082,7 @@
                                 onclick="showServiceDetails('Premium Partial Package')">
                                 <div class="card-body p-4">
                                     <img src="/img/PremiumPartial.PNG" class="service-icon mb-3"
-                                        alt="Premium Partial Package">
+                                        alt="Premium Partial Package" loading="lazy">
                                     <h3 class="card-title h4 text-success mb-3">Premium Partial Package</h3>
                                     <p class="card-text text-muted">Premium materials with superior comfort</p>
                                     <p class="fw-bold text-success">Starting at $1,250</p>
@@ -1098,7 +1094,7 @@
                                 onclick="showServiceDetails('Elite Partial Package')">
                                 <div class="card-body p-4">
                                     <img src="/img/ElitePartial.PNG" class="service-icon mb-3"
-                                        alt="Elite Partial Package">
+                                        alt="Elite Partial Package" loading="lazy">
                                     <h3 class="card-title h4 text-success mb-3">Elite Partial Package</h3>
                                     <p class="card-text text-muted">Premium materials with superior comfort</p>
                                     <p class="fw-bold text-success">Starting at $1,750</p>
@@ -1115,7 +1111,7 @@
                     <div class="card service-card h-100 text-center border-0 shadow-sm"
                         onclick="showServiceDetails('Other Services')">
                         <div class="card-body p-4">
-                            <img src="/img/tools_collage.jpg" class="service-icon mb-3" alt="Other Services">
+                            <img src="/img/tools_collage.jpg" class="service-icon mb-3" alt="Other Services" loading="lazy">
                             <h3 class="card-title h4 text-primary mb-3"><strong>Other Services</strong></h3>
                             <p class="card-text text-muted">Extractions • Relines • Repairs • Crowns • Implants</p>
                         </div>
@@ -1173,7 +1169,7 @@
                     <div class="p-4 bg-white rounded-3 shadow-sm">
                         <h5 class="mb-3">Powered by</h5>
                         <img src="/img/Sunbit-Logo.webp" alt="Sunbit Financing" style="height: 50px; width: auto;"
-                            class="mb-3">
+                            class="mb-3" loading="lazy">
                         <div class="d-grid">
                             <a class="btn btn-primary btn-lg rounded-pill" href="https://apply.sunbit.com/denturesmore"
                                 target="_blank" rel="noopener noreferrer">
@@ -1256,7 +1252,7 @@
                     style="max-width: 600px; background: linear-gradient(135deg, #f0f7ff 0%, #e8f5e9 100%); border: 2px solid #d0e8ff;">
                     <div class="mb-4">
                         <img src="/img/GR_Logo1.png" alt="Google"
-                            style="height: 100px; width: auto; margin-bottom: 50px;">.
+                            style="height: 100px; width: auto; margin-bottom: 50px;" loading="lazy">.
                         <!--"https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"--><br>
                         <i class="bi bi-star-fill text-warning" style="font-size: 2rem;"></i>
                         <i class="bi bi-star-fill text-warning" style="font-size: 2rem;"></i>
@@ -1335,9 +1331,9 @@
             </div>
             <br>
             <br>
-            <hr class="my-4" data-aos="fade-up" data-aos-delay="600">
+            <hr class="my-4">
             <div class="text-center">
-                <p class="mb-0">&copy; 2025 <a href="https://yelp.com/biz/denturesandmore-nashville"
+                <p class="mb-0">&copy; 2026 <a href="https://yelp.com/biz/denturesandmore-nashville"
                         class="copyright-link">Dentures and More</a>. All rights reserved.</p>
             </div>
         </div>
@@ -1376,7 +1372,7 @@
                 particlesJS('particles-js', {
                     particles: {
                         number: {
-                            value: 80,
+                            value: 30,
                             density: {
                                 enable: true,
                                 value_area: 800
@@ -1481,10 +1477,10 @@
     </script>
 
     <!-- Custom JS -->
-    <script src="/script.js"></script>
+    <script src="/script.js" defer></script>
 
     <!-- AOS (Animate On Scroll) JS -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({
             duration: 1000,
@@ -1579,6 +1575,8 @@
             startTimer();
         })();
     </script>
+
+
 </body>
 
 </html>

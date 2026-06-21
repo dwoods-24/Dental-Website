@@ -75,6 +75,19 @@ body {
     width: 100%;
 }
 
+/* Remove focus ring on navbar toggler after mouse click, keep for keyboard */
+.navbar-toggler:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
+}
+
+/* Highlight navbar toggler on hover only */
+.navbar-toggler:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
 /* Logo Styles */
 .navbar-logo {
     height: 100px;
@@ -238,6 +251,7 @@ body {
     border-radius: 10px;
     padding: 20px;
 }
+
 
 /* Loading message styling */
 .loading-message {
