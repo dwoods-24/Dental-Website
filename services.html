@@ -420,10 +420,13 @@
             font-size: .88rem;
             padding: 1rem;
             border: none;
+            min-width: 100px;
+            white-space: nowrap;
         }
 
         .compare-table thead th:first-child {
             background: #1a2332;
+            min-width: 130px;
         }
 
         .compare-table tbody td {
@@ -431,6 +434,11 @@
             font-size: .88rem;
             vertical-align: middle;
             border-color: #f0f0f0;
+        }
+
+        .compare-table tbody td:first-child {
+            font-weight: 600;
+            white-space: nowrap;
         }
 
         .compare-table tbody tr:hover {
@@ -629,7 +637,13 @@
             .compare-table thead th,
             .compare-table tbody td {
                 font-size: .78rem;
-                padding: .6rem .5rem;
+                padding: .6rem .6rem;
+                min-width: 88px;
+            }
+
+            .compare-table thead th:first-child,
+            .compare-table tbody td:first-child {
+                min-width: 110px;
             }
         }
 
@@ -1225,8 +1239,8 @@
                 </div>
             </div>
 
-            <div class="text-center mt-5" data-aos="fade-up">
-                <a href="tel:615-719-7883" class="btn btn-outline-primary rounded-pill px-4 me-2">
+            <div class="d-flex flex-wrap justify-content-center gap-3 mt-5" data-aos="fade-up">
+                <a href="tel:615-719-7883" class="btn btn-outline-primary rounded-pill px-4">
                     <i class="bi bi-telephone me-1"></i>Call to Ask About a Service
                 </a>
                 <a href="/index.html#appointment" class="btn btn-primary rounded-pill px-4">
@@ -1247,7 +1261,7 @@
             </div>
 
             <div class="table-responsive shadow-sm compare-table" data-aos="fade-up" data-aos-delay="100">
-                <table class="table mb-0 compare-table">
+                <table class="table mb-0">
                     <thead>
                         <tr>
                             <th>Feature</th>
