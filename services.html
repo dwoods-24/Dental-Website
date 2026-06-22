@@ -1061,10 +1061,9 @@
                 border-radius: 16px;
                 overflow: hidden;
             " data-aos="fade-up">
-                <video style="width: 100%; display: block; pointer-events: none;" autoplay loop muted playsinline
-                    preload="metadata">
+                <video id="implant-video" style="width: 100%; display: block; pointer-events: none;" autoplay loop muted playsinline
+                    preload="auto">
                     <source src="/img/implant.mp4" type="video/mp4">
-                    Your browser does not support this video format.
                 </video>
             </div>
 
@@ -1564,6 +1563,16 @@
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.min.js"></script>
     <script>
         AOS.init({ duration: 900, offset: 80, easing: 'ease-in-out', once: true });
+
+        // Force-play implant video on iOS where autoplay may be deferred
+        (function () {
+            const vid = document.getElementById('implant-video');
+            if (!vid) return;
+            const tryPlay = () => { vid.muted = true; vid.play().catch(() => {}); };
+            tryPlay();
+            document.addEventListener('touchstart', tryPlay, { once: true, passive: true });
+            document.addEventListener('scroll', tryPlay, { once: true, passive: true });
+        })();
 
         // ---- SCROLL GUARD (prevents accidental card clicks during touch scroll) ----
         let _touchMoved = false;
