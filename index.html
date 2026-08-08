@@ -93,13 +93,13 @@
       "openingHoursSpecification": [
         {
           "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday"],
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
           "opens": "09:00",
           "closes": "17:00"
         },
         {
           "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Friday", "Saturday"],
+          "dayOfWeek": ["Saturday"],
           "opens": "09:00",
           "closes": "14:00"
         }
@@ -107,7 +107,8 @@
       "sameAs": [
         "https://www.facebook.com/people/Dentures-More/61579188126912/",
         "https://www.instagram.com/denturesandmore/",
-        "https://yelp.com/biz/denturesandmore-nashville"
+        "https://yelp.com/biz/denturesandmore-nashville",
+        "https://www.chamberofcommerce.com/business-directory/tennessee/hermitage/denture-care-center/2026994117-dentures-more"
       ],
       "paymentAccepted": "Cash, Credit Card, Insurance",
       "areaServed": [
@@ -834,6 +835,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/forms.html">Patient Forms</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#reviews">Leave a Review</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -1232,7 +1236,7 @@
         </div>
     </section>
     <br>
-    <!--Google Review Section-->
+    <!-- Review Section -->
     <section id="reviews" class="py-5 bg-white">
         <div class="container">
             <div class="col-12 text-center mb-4" data-aos="fade-up">
@@ -1242,23 +1246,19 @@
             <div class="text-center" data-aos="fade-up" data-aos-delay="100">
                 <div class="mx-auto py-5 px-4 rounded-4 shadow-sm"
                     style="max-width: 600px; background: linear-gradient(135deg, #f0f7ff 0%, #e8f5e9 100%); border: 2px solid #d0e8ff;">
-                    <div class="mb-4">
-                        <img src="/img/GR_Logo1.png" alt="Google"
-                            style="height: 100px; width: auto; margin-bottom: 50px;" loading="lazy">.
-                        <!--"https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"--><br>
-                        <i class="bi bi-star-fill text-warning" style="font-size: 2rem;"></i>
-                        <i class="bi bi-star-fill text-warning" style="font-size: 2rem;"></i>
-                        <i class="bi bi-star-fill text-warning" style="font-size: 2rem;"></i>
-                        <i class="bi bi-star-fill text-warning" style="font-size: 2rem;"></i>
-                        <i class="bi bi-star-fill text-warning" style="font-size: 2rem;"></i>
+                    <div class="mb-3">
+                        <i class="bi bi-star-fill text-warning" style="font-size: 2.2rem;"></i>
+                        <i class="bi bi-star-fill text-warning" style="font-size: 2.2rem;"></i>
+                        <i class="bi bi-star-fill text-warning" style="font-size: 2.2rem;"></i>
+                        <i class="bi bi-star-fill text-warning" style="font-size: 2.2rem;"></i>
+                        <i class="bi bi-star-fill text-warning" style="font-size: 2.2rem;"></i>
                     </div>
                     <p class="text-muted mb-4" style="font-size: 1.05rem;">Loved your visit? Let others know — reviews
-                        help
-                        families in Nashville find the care they need.</p>
-                    <a href="https://g.page/r/CZua-RrYiZRcEAE/review" target="_blank" rel="noopener noreferrer"
-                        class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow">
-                        <i class="bi bi-google me-2"></i>Leave a Google Review
-                    </a>
+                        help families in Nashville find the care they need.</p>
+                    <button class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow"
+                        data-bs-toggle="modal" data-bs-target="#reviewModal">
+                        Leave a Review
+                    </button>
                 </div>
             </div>
         </div>
@@ -1439,6 +1439,38 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
                         onclick="scrollToSection('appointment')">Book This Service</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow-lg p-2">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold fs-4" id="reviewModalLabel">Leave a Review</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pt-3 pb-4">
+                    <p class="text-muted mb-4">Your feedback helps families in Nashville find the care they need.</p>
+                    <div class="d-grid gap-3">
+                        <a href="https://g.page/r/CZua-RrYiZRcEAE/review" target="_blank" rel="noopener noreferrer"
+                            class="btn btn-lg d-flex align-items-center justify-content-center gap-3 py-3 rounded-3 fw-semibold"
+                            style="background: #1a73e8; color: #fff; font-size: 1.1rem;"
+                            data-bs-dismiss="modal">
+                            <img src="/img/GR_Logo1.png" alt="Google" style="height: 26px; width: auto; filter: brightness(0) invert(1);">
+                            Google Review
+                        </a>
+                        <a href="https://www.yelp.com/writeareview/biz/y1O7Yew-o7g7hJnmEvBOZg?return_url=%2Fbiz%2Fy1O7Yew-o7g7hJnmEvBOZg&review_origin=biz-details-war-button"
+                            target="_blank" rel="noopener noreferrer"
+                            class="btn btn-lg d-flex align-items-center justify-content-center gap-3 py-3 rounded-3 fw-semibold"
+                            style="background: #d32323; color: #fff; font-size: 1.1rem;"
+                            data-bs-dismiss="modal">
+                            <i class="bi bi-yelp" style="font-size: 1.4rem;"></i>
+                            Yelp Review
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
